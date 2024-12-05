@@ -1,5 +1,5 @@
 <script>
-    import phraseImage from '$lib/ad4e49ee-98e7-44e5-bf60-2797b92e78f6.png';
+    import phraseImage from '$lib/phrase-images/ad4e49ee-98e7-44e5-bf60-2797b92e78f6.png';
 
     let phrase = "ΑΓΓΟΥΡΙ ΤΟΥ ΠΙΓΚΟΥ"
     let phraseWords = phrase.split(" ")
