@@ -1,14 +1,22 @@
 <script>
-    import phraseImage from '$lib/phrase-images/ad4e49ee-98e7-44e5-bf60-2797b92e78f6.png';
-
-    let phrase = "ΑΓΓΟΥΡΙ ΤΟΥ ΠΙΓΚΟΥ"
+    import phrases from '$lib/phrases.json'
+    let currentPhrase = phrases[54]    
+    
+    const images = import.meta.glob('$lib/phrase-images/*.*', { eager: true })
+    let imagePaths = []
+    for(let imagePath in images){
+        imagePaths.push(images[imagePath].default)
+    }
+    let img = imagePaths.find(p => p.endsWith(currentPhrase.file))
+    
+    let phrase = currentPhrase.title
     let phraseWords = phrase.split(" ")
     let phraseLetters = phraseWords.map((word) => word.split(""))    
     
 </script>
 <main>
     <section class="phrase-image">
-        <img src={phraseImage} alt="Image" id="phrase-image"/>
+        <img src={img} alt="The phrase" id="phrase-image"/>
     </section>
 
     <section class="phrase-blank-squares">
