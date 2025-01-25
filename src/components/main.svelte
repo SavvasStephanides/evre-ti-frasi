@@ -1,34 +1,55 @@
 <script>
-    import phrases from '$lib/phrases.json'
-    let currentPhrase = phrases[54]    
-    
-    const images = import.meta.glob('$lib/phrase-images/*.*', { eager: true })
-    let imagePaths = []
-    for(let imagePath in images){
-        imagePaths.push(images[imagePath].default)
+    import GameService from "../modules/GameService";
+
+
+    import phrases from "$lib/phrases.json";
+    let currentPhrase = phrases[60]
+
+    let gameService = new GameService()
+
+    let game = $state(gameService.getNewGameFromPhrase(currentPhrase))
+
+    const addLetter = function (letter){
+        game.boxes[game.cursor.word][game.cursor.letter].label = letter
+        
+        moveCursorForward()
     }
-    let img = imagePaths.find(p => p.endsWith(currentPhrase.file))
-    
-    let phrase = currentPhrase.title
-    let phraseWords = phrase.split(" ")
-    let phraseLetters = phraseWords.map((word) => word.split(""))    
-    
+
+    const moveCursorForward = function () {
+        let maxWords = game.boxes.length;
+        let maxLetters = game.boxes[game.cursor.word].length;
+        
+        game.cursor.letter += 1
+
+        if(game.cursor.letter === maxLetters){
+            game.cursor.letter = 0
+            game.cursor.word += 1
+        }
+
+        if(game.cursor.word === maxWords){
+            game.cursor.letter = maxLetters - 1
+            game.cursor.word = maxWords - 1
+        }        
+    }
 </script>
+
 <main>
     <section class="phrase-image">
-        <img src={img} alt="The phrase" id="phrase-image"/>
+        <img src={game.image} alt="The phrase" id="phrase-image" />
     </section>
 
     <section class="phrase-blank-squares">
-        {#each phraseWords as word}
-            <div class="phrase-square-line">
-                {#each word as letter}
-                    <div class="blank-square"></div>
+        {#each game.boxes as word, wordIndex}
+            <div class="phrase-word">
+                {#each word as letter, letterIndex}
+                    <div class="phrase-word-letter {wordIndex === game.cursor.word && letterIndex === game.cursor.letter ? "cursor" : ""}" status={game.boxes[wordIndex][letterIndex].label === game.boxes[wordIndex][letterIndex].solution ? "correct" : "wrong"}>
+                        <div class="content">{letter.label}</div>
+                    </div>
                 {/each}
             </div>
         {/each}
     </section>
-
+    <button onclick={() => addLetter("Α")}>Move ></button>
 </main>
 
 <style>
@@ -36,7 +57,7 @@
         margin: 0;
     }
 
-    main{
+    main {
         max-width: 600px;
         margin: auto;
     }
@@ -47,27 +68,42 @@
         border-radius: 30px;
     }
 
-    .phrase-blank-squares{
-        
-    }
-
-    .phrase-blank-squares .phrase-square-line{
-        display: flex;
+    .phrase-blank-squares .phrase-word {
+        display: inline-block;
         gap: 3px;
-        margin-top: 6px;
-        justify-content: center;
+        margin-top: 21px;
+        margin-right: 12px;
     }
 
-    .phrase-blank-squares .blank-square{
-        border: 1px solid #333;
-        height: 33px;
-        width: 24px;
+    .phrase-blank-squares .phrase-word .phrase-word-letter {
+        border: 1px solid #ddd;
+        box-shadow: 0 0 15px #ddd;
+        border-radius: 6px;
+        height: 42px;
+        width: 30px;
         font-size: 21px;
+        margin-right: 3px;
+        display: inline-block;
+        font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+        position: relative;
+    }
 
+    .phrase-blank-squares .phrase-word .phrase-word-letter .content {
         display: flex;
-        justify-content: center;
+        width: 100%;
+        height: 100%;
         align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
 
-        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    .phrase-blank-squares .phrase-word .phrase-word-letter.cursor{
+        background-color: yellow;
+    }
+
+    .phrase-blank-squares .phrase-word .phrase-word-letter[status="correct"]{
+        background-color: green;
     }
 </style>
