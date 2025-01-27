@@ -30,4 +30,19 @@ export default class GameService {
 
         return game;
     }
+
+    getBoxStatus(game, word, letter){
+        let box = game.boxes[word][letter]
+
+        if(box.label === ""){
+            return "BLANK"
+        }
+        if(box.label === box.solution){
+            return "CORRECT"
+        }
+        else{
+            return "WRONG"
+            
+        }
+    }
 }

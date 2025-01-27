@@ -42,14 +42,14 @@
         {#each game.boxes as word, wordIndex}
             <div class="phrase-word">
                 {#each word as letter, letterIndex}
-                    <div class="phrase-word-letter {wordIndex === game.cursor.word && letterIndex === game.cursor.letter ? "cursor" : ""}" status={game.boxes[wordIndex][letterIndex].label === game.boxes[wordIndex][letterIndex].solution ? "correct" : "wrong"}>
+                    <div class="phrase-word-letter {wordIndex === game.cursor.word && letterIndex === game.cursor.letter ? "cursor" : ""}" status={gameService.getBoxStatus(game, wordIndex, letterIndex)}>
                         <div class="content">{letter.label}</div>
                     </div>
                 {/each}
             </div>
         {/each}
     </section>
-    <button onclick={() => addLetter("Α")}>Move ></button>
+    <button onclick={() => addLetter("Ε")}>Add letter to cursor</button>
 </main>
 
 <style>
@@ -97,13 +97,23 @@
         position: absolute;
         top: 0;
         left: 0;
+        font-weight: bold;
     }
 
     .phrase-blank-squares .phrase-word .phrase-word-letter.cursor{
-        background-color: yellow;
+        border: 1px solid black;
     }
 
-    .phrase-blank-squares .phrase-word .phrase-word-letter[status="correct"]{
+    .phrase-blank-squares .phrase-word .phrase-word-letter[status="CORRECT"]{
         background-color: green;
+    }
+
+    .phrase-blank-squares .phrase-word .phrase-word-letter[status="WRONG"]{
+        background-color: rgb(159, 0, 0);
+    }
+
+    .phrase-blank-squares .phrase-word .phrase-word-letter[status="CORRECT"] .content,
+    .phrase-blank-squares .phrase-word .phrase-word-letter[status="WRONG"] .content{
+        color: white;
     }
 </style>
