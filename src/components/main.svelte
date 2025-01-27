@@ -1,22 +1,55 @@
+
 <script>
     import GameService from "../modules/GameService";
-
 
     import phrases from "$lib/phrases.json";
     import GameFactory from "../modules/GameFactory";
     import { onMount } from "svelte";
-    let currentPhrase = phrases[12]
+    import confetti from "canvas-confetti";
+    import PhraseService from "../modules/PhraseService";
 
+    let phraseService = new PhraseService()
     let gameFactory = new GameFactory()
+    let currentPhrase = phraseService.getDailyPhrase()
     
-    let game = $state(gameFactory.getNewGameFromPhrase(currentPhrase))
-    let gameService = new GameService(game)
+    
+    let game = $state(null)
+    let gameService = $state(null)
+
+    onMount(() => {
+        const savedGame = gameFactory.getGameFromLocalStorage()
+
+        const dailyGame = gameFactory.getNewGameFromPhrase(currentPhrase.gameId, currentPhrase.phrase)
+        
+        if(savedGame === null){
+            game = dailyGame
+        }
+        else{
+            if(savedGame.id === dailyGame.id){
+                game = savedGame
+            }
+            else{
+                game = dailyGame
+            }
+        }
+
+        gameService = new GameService(game)
+    })
+
+    $effect(() => {
+        let gameStringified = JSON.stringify(game)
+        localStorage.setItem("evretifrasi-game", gameStringified)
+    })
 
     let showKeyboard = $state(false)
 
     const addLetter = function (letter){
         game.boxes[game.cursor.word][game.cursor.letter].label = letter
         moveCursorForward()
+
+        if(gameService.isSolved()){
+            fireConfetti()
+        }
     }
 
     const removeLetter = function (){
@@ -66,15 +99,23 @@
         }
     }
 
+    const fireConfetti = function(){
+        confetti({
+            particleCount: 1000,
+            spread: 1000,
+            origin: { y: 0.6 },
+        })
+    }
+
     onMount(() => {
-        document.addEventListener("keyup", (e) => {
-            let key = e.key.toUpperCase()
+        document.addEventListener("keyup", (e) => {            
             
             if(e.code.startsWith("Key")){
+                let key = e.code.replace("Key", "")
                 let letterMap = {"E":"Ε","R":"Ρ","T":"Τ","Y":"Υ","U":"Θ","I":"Ι","O":"Ο","P":"Π","A":"Α","S":"Σ","D":"Δ","F":"Φ","G":"Γ","H":"Η","J":"Ξ","K":"Κ","L":"Λ","Z":"Ζ","X":"Χ","C":"Ψ","V":"Ω","B":"Β","N":"Ν","M":"Μ"}
                 addLetter(letterMap[key])
             }
-            else if(key === "BACKSPACE"){
+            else if(e.code === "Backspace"){
                 removeLetter()
             }
         })
@@ -89,9 +130,17 @@
         "Α Σ Δ Φ Γ Η Ξ Κ Λ",
         "Ζ Χ Ψ Ω Β Ν Μ"
     ]
+    
 </script>
 
+<svelte:head>
+	<title>Έβρε τη Φράση - Unpezable Games</title>
+	<html lang="el" />
+</svelte:head>
+
+{#if game !== null}
 <main>
+    
     <section class="phrase-image">
         <img src={game.image} alt="The phrase" id="phrase-image" />
     </section>
@@ -131,7 +180,7 @@
         <div class="letter-button" onclick={removeLetter} role="button">← Σβήσιμο</div>
     </div>
 </div>
-
+{/if}
 <style>
     * {
         margin: 0;

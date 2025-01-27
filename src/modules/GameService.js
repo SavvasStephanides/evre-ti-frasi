@@ -26,7 +26,7 @@ export default class GameService {
         return correctLetters.length === wordLetters.length
     }
 
-    isSolved(){
-        
+    isSolved(){                   
+        return this.game.boxes.every(word => word.every(letter => letter.label === letter.solution))
     }
 }

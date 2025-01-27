@@ -1,6 +1,7 @@
 export default class GameFactory {
-    getNewGameFromPhrase(phrase) {
+    getNewGameFromPhrase(gameId, phrase) {
         const game = {};
+        game.id = gameId
 
         const images = import.meta.glob("$lib/phrase-images/*.*", {
             eager: true,
@@ -29,5 +30,10 @@ export default class GameFactory {
         }
 
         return game;
+    }
+
+    getGameFromLocalStorage(){
+        let gameFromStorage = localStorage.getItem("evretifrasi-game")
+        return JSON.parse(gameFromStorage)
     }
 }
