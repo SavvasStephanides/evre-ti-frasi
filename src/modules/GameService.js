@@ -1,38 +1,10 @@
 export default class GameService {
-    getNewGameFromPhrase(phrase) {
-        const game = {};
-
-        const images = import.meta.glob("$lib/phrase-images/*.*", {
-            eager: true,
-        });
-        let imagePaths = [];
-        for (let imagePath in images) {
-            imagePaths.push(images[imagePath].default);
-        }
-        let img = imagePaths.find((p) => p.endsWith(phrase.file));
-        game.image = img;
-
-        game.boxes = phrase.title.split(" ").map((word) =>
-            word.split("").map((letter) => {
-                let gameLetter = {
-                    label: "",
-                    solution: letter
-                }
-                
-                return gameLetter;
-            }),
-        );
-
-        game.cursor = {
-            word: 0,
-            letter: 0,
-        }
-
-        return game;
+    constructor(game){
+        this.game = game
     }
 
-    getBoxStatus(game, word, letter){
-        let box = game.boxes[word][letter]
+    getLetterBoxStatus(word, letter){
+        let box = this.game.boxes[word][letter]
 
         if(box.label === ""){
             return "BLANK"
@@ -44,5 +16,17 @@ export default class GameService {
             return "WRONG"
             
         }
+    }
+
+    allLettersInWordAreCorrect(word){
+        let wordLetters = this.game.boxes[word]
+        
+        let correctLetters = wordLetters.filter(letter => letter.label === letter.solution)
+
+        return correctLetters.length === wordLetters.length
+    }
+
+    isSolved(){
+        
     }
 }
