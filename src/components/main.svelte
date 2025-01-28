@@ -158,9 +158,15 @@
     <section class="phrase-image">
         <img src={game.image} alt="The phrase" id="phrase-image" />
     </section>
-
+    {#if gameService.isSolved()}
+    <section id="success">
+        <h2>🎉 Ήβρες τη φράση!</h2>
+        <div class="game-title">{game.title}</div>
+        <button class="share">Μοιράσου το σκορ σου!</button>
+    </section>
+    {:else}
     <section id="description" show={game.hintsUsed.description ? "1" : "0"}>
-        Λαλούμεν το άμαν εν θέλουμε να δώκουμε λεφτά κάποιου
+        Λαλούμεν το άμαν κάποιος έν ξέρει τι γίνεται γυρώ του
     </section>
 
     <section class="phrase-blank-squares">
@@ -192,6 +198,7 @@
     }}><span>Λύσε το!</span></button>
 
     <div style={showKeyboard ? "margin-top: 300px" : ""}></div>
+    {/if}
 </main>
 
 <div id="keyboard" visible={showKeyboard ? "1" : "0"}>
@@ -227,6 +234,7 @@
 
     .phrase-blank-squares{
         padding: 21px;
+        text-align: center;
     }
 
     .phrase-blank-squares .phrase-word {
@@ -363,5 +371,26 @@
 
     section#description[show="1"]{
         display: block;
+    }
+
+    section#success h2{
+        text-align: center;
+        padding: 15px;
+    }
+
+    section#success div.game-title{
+        text-align: center;
+        padding: 15px;
+        font-size: 30px;
+    }
+
+    section#success button.share{
+        display: block;
+        padding: 15px;
+        width: 100%;
+        font-size: 21px;
+        background-color: green;
+        color: white;
+        margin-top: 30px;
     }
 </style>

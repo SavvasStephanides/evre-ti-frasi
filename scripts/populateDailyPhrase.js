@@ -24,5 +24,5 @@ for(let i = 0 ; i < 600 ; i++){
 
 }
 
-fs.writeFileSync("daily-phrases.json", JSON.stringify(dailyPhrases))
+fs.writeFileSync("daily-phrase.json", JSON.stringify(dailyPhrases))
 

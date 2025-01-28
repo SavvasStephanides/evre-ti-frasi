@@ -2,6 +2,7 @@ export default class GameFactory {
     getNewGameFromPhrase(gameId, phrase) {
         const game = {};
         game.id = gameId
+        game.title = phrase.title
 
         const images = import.meta.glob("$lib/phrase-images/*.*", {
             eager: true,
