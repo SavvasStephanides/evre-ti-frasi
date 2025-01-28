@@ -29,6 +29,12 @@ export default class GameFactory {
             letter: 0,
         }
 
+        game.hintsUsed = {
+            description: false,
+            revealLargestWord: false,
+            revealFirstLetters: false
+        }
+
         return game;
     }
 

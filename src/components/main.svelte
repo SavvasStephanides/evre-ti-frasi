@@ -8,10 +8,11 @@
     import confetti from "canvas-confetti";
     import PhraseService from "../modules/PhraseService";
 
+    import loadingGif from '$lib/loading.gif';
+
     let phraseService = new PhraseService()
     let gameFactory = new GameFactory()
     let currentPhrase = phraseService.getDailyPhrase()
-    
     
     let game = $state(null)
     let gameService = $state(null)
@@ -34,6 +35,8 @@
         }
 
         gameService = new GameService(game)
+        
+        
     })
 
     $effect(() => {
@@ -99,6 +102,14 @@
         }
     }
 
+    const revealLargestWord = function(){
+        gameService.revealLargestWord()
+    }
+
+    const revealFirstLetters = function(){
+        gameService.revealLargestWord
+    }
+
     const fireConfetti = function(){
         confetti({
             particleCount: 1000,
@@ -135,14 +146,21 @@
 
 <svelte:head>
 	<title>Έβρε τη Φράση - Unpezable Games</title>
-	<html lang="el" />
 </svelte:head>
 
-{#if game !== null}
+{#if game === null}
+<div style="text-align: center;">
+    <img src={loadingGif} alt="loading" style="">
+</div>
+{:else}
 <main>
     
     <section class="phrase-image">
         <img src={game.image} alt="The phrase" id="phrase-image" />
+    </section>
+
+    <section id="description" show={game.hintsUsed.description ? "1" : "0"}>
+        Λαλούμεν το άμαν εν θέλουμε να δώκουμε λεφτά κάποιου
     </section>
 
     <section class="phrase-blank-squares">
@@ -160,6 +178,15 @@
             </div>
         {/each}
     </section>
+
+    <section id="hints">
+        <h2>Βοήθειες</h2>
+        <button onclick={() => gameService.showDescription()} disabled={game.hintsUsed.description}>Δείξε την περιγραφή της φράσης</button>
+        <button onclick={() => gameService.revealLargestWord()} disabled={game.hintsUsed.revealLargestWord}>Φανέρωσε την μεγαλύτερη λέξη</button>
+        <button onclick={() => gameService.revealFirstLetters()} disabled={game.hintsUsed.revealFirstLetters}>Φανέρωσε το πρώτο γράμμα της κάθε λέξης</button>
+        
+    </section>
+
     <button id="keyboard-button" visible="0" onclick={() => {        
         showKeyboard = true
     }}><span>Λύσε το!</span></button>
@@ -214,13 +241,8 @@
         border-radius: 6px;
     }
 
-    .phrase-blank-squares .phrase-word[all-correct="yes"] .phrase-word-letter{
-        border: 0;
-        box-shadow: none;
-    }
-
     .phrase-blank-squares .phrase-word .phrase-word-letter {
-        border: 1px solid #ddd;
+        border: 3px solid #ddd;
         box-shadow: 0 0 15px #ddd;
         border-radius: 6px;
         height: 42px;
@@ -244,7 +266,7 @@
     }
 
     .phrase-blank-squares .phrase-word .phrase-word-letter.cursor{
-        border: 1px solid black;
+        border: 3px solid black;
     }
 
     .phrase-blank-squares .phrase-word .phrase-word-letter[status="CORRECT"]{
@@ -302,5 +324,44 @@
         border: 1px solid #999;
         background-color: #eee;
         padding: 9px;
+    }
+
+    section#hints{
+        margin-top: 21px;
+    }
+
+    section#hints h2{
+        text-align: center;
+    }
+
+    section#hints button{
+        margin-top: 15px;
+        display: block;
+        width: 100%;
+        font-size: 18px;
+        background-color: #eee;
+        border: 1px solid #333;
+        border-radius: 3px;
+        padding: 6px;
+        color: black;
+        cursor: pointer;
+    }
+
+    section#hints button:hover{
+        background-color: #ddd;
+    }
+    section#hints button[disabled]{
+        opacity: 0.5;
+    }
+
+    section#description{
+        padding: 30px;
+        font-size: 21px;
+        text-align: center;
+        display: none;
+    }
+
+    section#description[show="1"]{
+        display: block;
     }
 </style>
