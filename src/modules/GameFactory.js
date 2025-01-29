@@ -14,21 +14,23 @@ export default class GameFactory {
         let img = imagePaths.find((p) => p.endsWith(phrase.file));
         game.image = img;
 
-        game.boxes = phrase.title.split(" ").map((word) =>
-            word.split("").map((letter) => {
-                let gameLetter = {
-                    label: "",
-                    solution: letter
-                }
-                
-                return gameLetter;
-            }),
-        );
+        game.letterPoints = []
 
-        game.cursor = {
-            word: 0,
-            letter: 0,
-        }
+        let words = phrase.title.split(" ")
+
+        for (let w = 0 ; w < words.length ; w++){
+            for(let l = 0 ; l < words[w].length ; l++){
+                let point = {
+                    w,
+                    l,
+                    solution: words[w][l],
+                    label: ""
+                }
+                game.letterPoints.push(point)
+            }
+        }                
+
+        game.cursor = 0
 
         game.hintsUsed = {
             description: false,

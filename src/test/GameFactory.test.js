@@ -13,27 +13,33 @@ describe("GameFactory", () => {
         let game = gameFactory.getNewGameFromPhrase(gameId, phrase)        
         
         expect(game.id).toBe(4)
-        game.title = "Η ΚΟΥΤΣΗ ΜΑΡΙΑ"
-        expect(game.boxes.length).toBe(3)
-        expect(game.boxes[0].length).toBe(1)
-        expect(game.boxes[1].length).toBe(6)
-        expect(game.boxes[2].length).toBe(5)
+        expect(game.title).toBe("Η ΚΟΥΤΣΗ ΜΑΡΙΑ")
+        expect(game.letterPoints.length).toBe(12)
 
-        let expectedBoxes = [
-            ["Η"],
-            ["Κ", "Ο", "Υ", "Τ", "Σ", "Η"],
-            ["Μ", "Α", "Ρ", "Ι","Α"]
+        let expectedPoints = [
+            {w: 0, l: 0, label: "", solution: "Η"},
+            {w: 1, l: 0, label: "", solution: "Κ"},
+            {w: 1, l: 1, label: "", solution: "Ο"},
+            {w: 1, l: 2, label: "", solution: "Υ"},
+            {w: 1, l: 3, label: "", solution: "Τ"},
+            {w: 1, l: 4, label: "", solution: "Σ"},
+            {w: 1, l: 5, label: "", solution: "Η"},
+            {w: 2, l: 0, label: "", solution: "Μ"},
+            {w: 2, l: 1, label: "", solution: "Α"},
+            {w: 2, l: 2, label: "", solution: "Ρ"},
+            {w: 2, l: 3, label: "", solution: "Ι"},
+            {w: 2, l: 4, label: "", solution: "Α"}
         ]
 
-        for (let wordIndex = 0 ; wordIndex < expectedBoxes.length ; wordIndex++){
-            for(let letterIndex = 0 ; letterIndex < expectedBoxes[wordIndex].length ; letterIndex++){
-                expect(game.boxes[wordIndex][letterIndex].solution).toBe(expectedBoxes[wordIndex][letterIndex])
-                expect(game.boxes[wordIndex][letterIndex].label).toBe("")
-            }
-        }
+        game.letterPoints.forEach((point, index) => {
+            let expectedPoint = expectedPoints[index]
+            expect(point.w).toBe(expectedPoint.w)
+            expect(point.l).toBe(expectedPoint.l)
+            expect(point.label).toBe(expectedPoint.label)
+            expect(point.solution).toBe(expectedPoint.solution)
+        })
 
-        expect(game.cursor.word).toBe(0)
-        expect(game.cursor.letter).toBe(0)
+        expect(game.cursor).toBe(0)
 
         expect(game.hintsUsed.description).toBe(false)
         expect(game.hintsUsed.revealLargestWord).toBe(false)
