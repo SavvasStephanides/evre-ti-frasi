@@ -7,13 +7,15 @@ describe("GameFactory", () => {
         let gameId = 4
         let phrase = {
             "file": "0180ed4a-45d6-44a3-b3ae-bcc48a7513dd.png",
-            "title": "Η ΚΟΥΤΣΗ ΜΑΡΙΑ"
+            "title": "Η ΚΟΥΤΣΗ ΜΑΡΙΑ",
+            "hint": "Άγνωστο πρόσωπο"
         }
 
         let game = gameFactory.getNewGameFromPhrase(gameId, phrase)        
         
         expect(game.id).toBe(4)
         expect(game.title).toBe("Η ΚΟΥΤΣΗ ΜΑΡΙΑ")
+        expect(game.hint).toBe("Άγνωστο πρόσωπο")
         expect(game.letterPoints.length).toBe(12)
 
         let expectedPoints = [

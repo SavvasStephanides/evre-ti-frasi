@@ -101,7 +101,7 @@
 
 {#if game === null}
 <div style="text-align: center;">
-    <img src={loadingGif} alt="loading" style="">
+    <img src={loadingGif} alt="loading" style=" width: 60px">
 </div>
 {:else}
 <main>
@@ -117,7 +117,7 @@
     </section>
     {:else}
     <section id="description" show={game.hintsUsed.description ? "1" : "0"}>
-        description
+        {game.hint}
     </section>
 
     <section class="phrase-blank-squares">

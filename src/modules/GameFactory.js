@@ -3,6 +3,7 @@ export default class GameFactory {
         const game = {};
         game.id = gameId
         game.title = phrase.title
+        game.hint = phrase.hint
 
         const images = import.meta.glob("$lib/phrase-images/*.*", {
             eager: true,
