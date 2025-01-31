@@ -79,4 +79,12 @@ export default class GameService {
     getUnsolvedLetterPoints(){
         return this.game.letterPoints.filter((point) => point.label !== point.solution)
     }
+
+    getGameAsShareableString(){
+        let title = `💬 Έβρε τη φράση #${this.game.id}`
+        let secondLine = `${this.isSolved() ? "🎉" : "😢"} ${this.game.title.split(" ").map((word, index) => index).map((wordIndex) => this.allLettersInWordAreCorrect(wordIndex) ? "✅" : "❌").join("")}`
+        let thirdLine = Object.keys(this.game.hintsUsed).map(key => this.game.hintsUsed[key] ? "💡" : "").join("")
+
+        return title + "\n\n" + secondLine + "\n" + thirdLine
+    }
 }

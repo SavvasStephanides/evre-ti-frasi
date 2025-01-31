@@ -69,6 +69,19 @@
         })
     }
 
+    const shareGame = function shareGame(){
+        let text = gameService.getGameAsShareableString()
+
+        if(navigator.share){            
+            navigator.share({
+                text: text
+            })
+        }
+        else{
+            navigator.clipboard.writeText(text)
+        }
+    }
+
     onMount(() => {
         document.addEventListener("keyup", (e) => {            
             
@@ -113,7 +126,7 @@
     <section id="success">
         <h2>🎉 Ήβρες τη φράση!</h2>
         <div class="game-title">{game.title}</div>
-        <button class="share">Μοιράσου το σκορ σου!</button>
+        <button class="share" onclick={shareGame}>Μοιράσου το σκορ σου!</button>
     </section>
     {:else}
     <section id="description" show={game.hintsUsed.description ? "1" : "0"}>
@@ -347,5 +360,6 @@
         background-color: green;
         color: white;
         margin-top: 30px;
+        cursor: pointer;
     }
 </style>
