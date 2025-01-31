@@ -1,186 +1,331 @@
-
 <script>
-    import GameService from "../modules/GameService"
+    import GameService from "../modules/GameService";
 
-    import phrases from "$lib/phrases.json"
-    import GameFactory from "../modules/GameFactory"
-    import { onMount } from "svelte"
-    import confetti from "canvas-confetti"
-    import PhraseService from "../modules/PhraseService"
+    import phrases from "$lib/phrases.json";
+    import GameFactory from "../modules/GameFactory";
+    import { onMount } from "svelte";
+    import confetti from "canvas-confetti";
+    import PhraseService from "../modules/PhraseService";
 
-    import loadingGif from '$lib/loading.gif'
+    import loadingGif from "$lib/loading.gif"
 
-    let phraseService = new PhraseService()
-    let gameFactory = new GameFactory()
-    let currentPhrase = phraseService.getDailyPhrase()
-    
-    let game = $state(null)
-    let gameService = $state(null)
-    let showKeyboard = $state(false)
+    let showGameRules = $state(true)
+    import gameRulesImage from "$lib/phrase-images/cea69d11-6c76-4a2e-94a9-dc10f9214830.png";
+    import gameRulesGreenSquare from "$lib/rules-assets/green-square.png";
+    import gameRulesRedSquare from "$lib/rules-assets/red-square.png";
+    import gameRulesGreenWord from "$lib/rules-assets/green-word.png";
+    import gameRulesSolved from "$lib/rules-assets/solved.png";
+
+    let phraseService = new PhraseService();
+    let gameFactory = new GameFactory();
+    let currentPhrase = phraseService.getDailyPhrase();
+
+    let showGameRulesPopup
+
+    let game = $state(null);
+    let gameService = $state(null);
+    let showKeyboard = $state(false);
 
     onMount(() => {
-        const savedGame = gameFactory.getGameFromLocalStorage()
+        const savedGame = gameFactory.getGameFromLocalStorage();
 
-        const dailyGame = gameFactory.getNewGameFromPhrase(currentPhrase.gameId, currentPhrase.phrase)
-        
-        if(savedGame === null){
-            game = dailyGame
-        }
-        else{
-            if(savedGame.id === dailyGame.id){
-                game = savedGame
-            }
-            else{
-                game = dailyGame
+        const dailyGame = gameFactory.getNewGameFromPhrase(
+            currentPhrase.gameId,
+            currentPhrase.phrase,
+        );
+
+        if (savedGame === null) {
+            game = dailyGame;
+        } else {
+            if (savedGame.id === dailyGame.id) {
+                game = savedGame;
+            } else {
+                game = dailyGame;
             }
         }
 
         gameService = new GameService(game)
+
+        let showRulesFlagFromLocalStorage = localStorage.getItem("evretifrasi-showRules")
+
+        if(showRulesFlagFromLocalStorage ){
+            showGameRules = showRulesFlagFromLocalStorage === "true"
+        }
+        else{
+            showGameRules = true
+        }
+        
     })
 
     $effect(() => {
         let gameStringified = JSON.stringify(game)
         localStorage.setItem("evretifrasi-game", gameStringified)
-    })
 
-    
+        localStorage.setItem("evretifrasi-showRules", showGameRules)
+        console.log(localStorage.getItem("evretifrasi-showRules"))
+        
+        
+    });
 
-    const addLetter = function (letter){
-        game.letterPoints[game.cursor].label = letter
-        gameService.moveCursorForward()
+    const addLetter = function (letter) {
+        game.letterPoints[game.cursor].label = letter;
+        gameService.moveCursorForward();
 
-        if(gameService.isSolved()){            
-            game.hasEnded = true
-            fireConfetti()
+        if (gameService.isSolved()) {
+            game.hasEnded = true;
+            fireConfetti();
         }
-    }
+    };
 
-    const removeLetter = function (){
-        if(game.letterPoints[game.cursor].label === ""){
-            gameService.moveCursorBack()
+    const removeLetter = function () {
+        if (game.letterPoints[game.cursor].label === "") {
+            gameService.moveCursorBack();
         }
-        game.letterPoints[game.cursor].label = ""
-    }
+        game.letterPoints[game.cursor].label = "";
+    };
 
-    const fireConfetti = function(){
+    const fireConfetti = function () {
         confetti({
             particleCount: 1000,
             spread: 1000,
             origin: { y: 0.6 },
-        })
-    }
+        });
+    };
 
-    const shareGame = function shareGame(){
-        let text = gameService.getGameAsShareableString()        
+    const shareGame = function shareGame() {
+        let text = gameService.getGameAsShareableString();
 
-        if(navigator.share){            
+        if (navigator.share) {
             navigator.share({
-                text: text
-            })
+                text: text,
+            });
+        } else {
+            navigator.clipboard.writeText(text);
         }
-        else{
-            navigator.clipboard.writeText(text)
-        }
-    }
+    };
 
     onMount(() => {
-        document.addEventListener("keyup", (e) => {            
-            
-            if(e.code.startsWith("Key")){
-                let key = e.code.replace("Key", "")
-                let letterMap = {"E":"Ε","R":"Ρ","T":"Τ","Y":"Υ","U":"Θ","I":"Ι","O":"Ο","P":"Π","A":"Α","S":"Σ","D":"Δ","F":"Φ","G":"Γ","H":"Η","J":"Ξ","K":"Κ","L":"Λ","Z":"Ζ","X":"Χ","C":"Ψ","V":"Ω","B":"Β","N":"Ν","M":"Μ"}
-                addLetter(letterMap[key])
+        document.addEventListener("keyup", (e) => {
+            if (e.code.startsWith("Key")) {
+                let key = e.code.replace("Key", "");
+                let letterMap = {
+                    E: "Ε",
+                    R: "Ρ",
+                    T: "Τ",
+                    Y: "Υ",
+                    U: "Θ",
+                    I: "Ι",
+                    O: "Ο",
+                    P: "Π",
+                    A: "Α",
+                    S: "Σ",
+                    D: "Δ",
+                    F: "Φ",
+                    G: "Γ",
+                    H: "Η",
+                    J: "Ξ",
+                    K: "Κ",
+                    L: "Λ",
+                    Z: "Ζ",
+                    X: "Χ",
+                    C: "Ψ",
+                    V: "Ω",
+                    B: "Β",
+                    N: "Ν",
+                    M: "Μ",
+                };
+                addLetter(letterMap[key]);
+            } else if (e.code === "Backspace") {
+                removeLetter();
             }
-            else if(e.code === "Backspace"){
-                removeLetter()
-            }
-        })
-        
-        if (window.matchMedia("(pointer: coarse)").matches){
-            document.querySelector("#keyboard-button").setAttribute("visible", "1")
+        });
+
+        if (window.matchMedia("(pointer: coarse)").matches) {
+            document
+                .querySelector("#keyboard-button")
+                .setAttribute("visible", "1");
         }
-    })
+    });
 
     let keyboardKeys = [
         "Ε Ρ Τ Υ Θ Ι Ο Π",
         "Α Σ Δ Φ Γ Η Ξ Κ Λ",
-        "Ζ Χ Ψ Ω Β Ν Μ"
-    ]
-    
+        "Ζ Χ Ψ Ω Β Ν Μ",
+    ];
 </script>
 
 <svelte:head>
-	<title>Έβρε τη Φράση - Unpezable Games</title>
+    <title>Έβρε τη Φράση - Unpezable Games</title>
 </svelte:head>
 
 {#if game === null}
-<div style="text-align: center;">
-    <img src={loadingGif} alt="loading" style=" width: 60px">
-</div>
+    <div style="text-align: center;">
+        <img src={loadingGif} alt="loading" style=" width: 60px" />
+    </div>
 {:else}
-<main>
-    
-    <section class="phrase-image">
-        <img src={game.image} alt="The phrase" id="phrase-image" />
-    </section>
-    {#if game.hasEnded}
-    <section id="end-page">
-        {#if gameService.isSolved()}
-            <h2>🎉 Ήβρες τη φράση!</h2>
+    <main>
+        <section class="phrase-image">
+            <img src={game.image} alt="The phrase" id="phrase-image" />
+        </section>
+        {#if game.hasEnded}
+            <section id="end-page">
+                {#if gameService.isSolved()}
+                    <h2>🎉 Ήβρες τη φράση!</h2>
+                {:else}
+                    <h2>😢</h2>
+                {/if}
+                <div class="game-title">{game.title}</div>
+                <button class="share" onclick={shareGame}
+                    >Μοιράσου το σκορ σου!</button
+                >
+            </section>
         {:else}
-            <h2>😢</h2>
-        {/if}
-        <div class="game-title">{game.title}</div>
-        <button class="share" onclick={shareGame}>Μοιράσου το σκορ σου!</button>
-    </section>
-    {:else}
-    <section id="description" show={game.hintsUsed.description ? "1" : "0"}>
-        {game.hint}
-    </section>
+            <section
+                id="description"
+                show={game.hintsUsed.description ? "1" : "0"}
+            >
+                {game.hint}
+            </section>
 
-    <section class="phrase-blank-squares">
-        {#each [...new Set(game.letterPoints.map((point) => point.w))] as wordIndex}
-            <div class="phrase-word"  all-correct={gameService.allLettersInWordAreCorrect(wordIndex) ? "yes" : "no"}>
-            {#each game.letterPoints.filter(point => point.w === wordIndex) as wordLetter}
-                <div class="phrase-word-letter {game.letterPoints[game.cursor].w === wordIndex && game.letterPoints[game.cursor].l === wordLetter.l ? "cursor" : ""}" status={gameService.getLetterBoxStatus(wordIndex, wordLetter.l)}>
-                    <div class="content" onclick={() => {
-                        gameService.moveCursor(game.letterPoints.findIndex(point => point.w === wordIndex && point.l === wordLetter.l))
-                        showKeyboard = window.matchMedia("(pointer: coarse)").matches
-                    }}>{wordLetter.label}</div>
+            <section class="phrase-blank-squares">
+                {#each [...new Set(game.letterPoints.map((point) => point.w))] as wordIndex}
+                    <div
+                        class="phrase-word"
+                        all-correct={gameService.allLettersInWordAreCorrect(
+                            wordIndex,
+                        )
+                            ? "yes"
+                            : "no"}
+                    >
+                        {#each game.letterPoints.filter((point) => point.w === wordIndex) as wordLetter}
+                            <div
+                                class="phrase-word-letter {game.letterPoints[
+                                    game.cursor
+                                ].w === wordIndex &&
+                                game.letterPoints[game.cursor].l ===
+                                    wordLetter.l
+                                    ? 'cursor'
+                                    : ''}"
+                                status={gameService.getLetterBoxStatus(
+                                    wordIndex,
+                                    wordLetter.l,
+                                )}
+                            >
+                                <div
+                                    class="content"
+                                    onclick={() => {
+                                        gameService.moveCursor(
+                                            game.letterPoints.findIndex(
+                                                (point) =>
+                                                    point.w === wordIndex &&
+                                                    point.l === wordLetter.l,
+                                            ),
+                                        );
+                                        showKeyboard =
+                                            window.matchMedia(
+                                                "(pointer: coarse)",
+                                            ).matches;
+                                    }}
+                                >
+                                    {wordLetter.label}
+                                </div>
+                            </div>
+                        {/each}
                     </div>
-            {/each}
+                {/each}
+            </section>
+
+            <section id="hints">
+                <h2>Βοήθειες</h2>
+                <button
+                    onclick={() => gameService.showDescription()}
+                    disabled={game.hintsUsed.description}
+                    >Δείξε την περιγραφή της φράσης</button
+                >
+                <button
+                    onclick={() => gameService.revealLargestWord()}
+                    disabled={game.hintsUsed.revealLargestWord}
+                    >Φανέρωσε την μεγαλύτερη λέξη</button
+                >
+                <button
+                    onclick={() => gameService.revealFirstLetters()}
+                    disabled={game.hintsUsed.revealFirstLetters}
+                    >Φανέρωσε το πρώτο γράμμα της κάθε λέξης</button
+                >
+            </section>
+
+            <div
+                style={showKeyboard && !game.hasEnded
+                    ? "margin-top: 300px"
+                    : ""}
+            ></div>
+        {/if}
+    </main>
+
+    <div id="game-rules-overlay" style={showGameRules ? "display: block" : "display: none"}>
+        <div id="game-rules">
+            <button onclick={() => showGameRules = false} class="close-button">X</button>
+            <div class="content">
+                <h1>Πώς παίζεται το παιχνίδι:</h1>
+
+                <p>Μάντεψε την Κυπριακή φράση της ημέρας θωρώντας την εικόνα.</p>
+
+                <p>
+                    Η φράση μπορεί να εν κάτι που λαλούν οι Κυπραίοι, κάποιο
+                    γνωστό τραγούδι, κάποιος γλωσσοδέτης κτλ...
+                </p>
+
+                <hr />
+
+                <h2>Παράδειγματα</h2>
+
+                <img src={gameRulesImage} alt="" style="width: 100%" />
+
+                <p>Πράσινο κουτούι σημαίνει ότι το γράμμα εν σωστό</p>
+                <img src={gameRulesGreenSquare} alt="" />
+
+                <p>Κόκκινο κουτούι σημαίνει ότι το γράμμα εν λάθος</p>
+                <img src={gameRulesRedSquare} alt="" />
+
+                <p>
+                    Πράσινο κουτούι γυρώ που την λέξη σημαίνει ότι ολόκληρη η
+                    λέξη εν σωστή
+                </p>
+                <img src={gameRulesGreenWord} alt="" />
+                
+                <p>Μόλις έβρεις ολόκληρη την φράση, δείχνει σου το τούτο:</p>
+                <img src={gameRulesSolved} alt="" />
+
+                <hr/>
+
+                <p style="font-weight: bold">Τζαινούρκα φράση κάθε μέρα!</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="keyboard" visible={showKeyboard ? "1" : "0"}>
+        <button class="close" onclick={() => (showKeyboard = false)}>X</button>
+        {#each keyboardKeys as keyRow}
+            <div class="row">
+                {#each keyRow.split(" ") as key}
+                    <div
+                        class="letter-button"
+                        onclick={() => addLetter(key)}
+                        role="button"
+                    >
+                        {key}
+                    </div>
+                {/each}
             </div>
         {/each}
-    </section>
-
-    <section id="hints">
-        <h2>Βοήθειες</h2>
-        <button onclick={() => gameService.showDescription()} disabled={game.hintsUsed.description}>Δείξε την περιγραφή της φράσης</button>
-        <button onclick={() => gameService.revealLargestWord()} disabled={game.hintsUsed.revealLargestWord}>Φανέρωσε την μεγαλύτερη λέξη</button>
-        <button onclick={() => gameService.revealFirstLetters()} disabled={game.hintsUsed.revealFirstLetters}>Φανέρωσε το πρώτο γράμμα της κάθε λέξης</button>
-        
-    </section>
-
-    
-
-    <div style={showKeyboard && !game.hasEnded ? "margin-top: 300px" : ""}></div>
-    {/if}
-</main>
-
-<div id="keyboard" visible={showKeyboard ? "1" : "0"}>
-    <button class="close" onclick={() => showKeyboard = false}>X</button>
-    {#each keyboardKeys as keyRow}
         <div class="row">
-        {#each keyRow.split(" ") as key}
-            <div class="letter-button" onclick={() => addLetter(key)} role="button">{key}</div>
-        {/each}
+            <div class="letter-button" onclick={removeLetter} role="button">
+                ← Σβήσιμο
+            </div>
         </div>
-    {/each}
-    <div class="row">
-        <div class="letter-button" onclick={removeLetter} role="button">← Σβήσιμο</div>
     </div>
-</div>
 {/if}
+
 <style>
     * {
         margin: 0;
@@ -198,7 +343,7 @@
         border-radius: 30px;
     }
 
-    .phrase-blank-squares{
+    .phrase-blank-squares {
         padding: 21px;
         text-align: center;
     }
@@ -210,7 +355,7 @@
         margin-right: 12px;
     }
 
-    .phrase-blank-squares .phrase-word[all-correct="yes"]{
+    .phrase-blank-squares .phrase-word[all-correct="yes"] {
         background-color: green;
         border-radius: 6px;
     }
@@ -239,43 +384,49 @@
         font-weight: bold;
     }
 
-    .phrase-blank-squares .phrase-word .phrase-word-letter.cursor{
+    .phrase-blank-squares .phrase-word .phrase-word-letter.cursor {
         border: 3px solid black;
     }
 
-    .phrase-blank-squares .phrase-word .phrase-word-letter[status="CORRECT"]{
+    .phrase-blank-squares .phrase-word .phrase-word-letter[status="CORRECT"] {
         background-color: green;
     }
 
-    .phrase-blank-squares .phrase-word .phrase-word-letter[status="WRONG"]{
+    .phrase-blank-squares .phrase-word .phrase-word-letter[status="WRONG"] {
         background-color: rgb(159, 0, 0);
     }
 
-    .phrase-blank-squares .phrase-word .phrase-word-letter[status="CORRECT"] .content,
-    .phrase-blank-squares .phrase-word .phrase-word-letter[status="WRONG"] .content{
+    .phrase-blank-squares
+        .phrase-word
+        .phrase-word-letter[status="CORRECT"]
+        .content,
+    .phrase-blank-squares
+        .phrase-word
+        .phrase-word-letter[status="WRONG"]
+        .content {
         color: white;
     }
 
-    .phrase-blank-squares .phrase-word[all-correct="yes"] .phrase-word-letter{
+    .phrase-blank-squares .phrase-word[all-correct="yes"] .phrase-word-letter {
         border: 3px solid transparent;
         box-shadow: 0 0 0;
     }
 
-    #keyboard-button[visible="0"]{
+    #keyboard-button[visible="0"] {
         display: none;
     }
 
-    #keyboard-button[visible="1"]{
+    #keyboard-button[visible="1"] {
         display: block;
         width: 100%;
         margin-top: 9px;
-        font-size: 15px;   
+        font-size: 15px;
         background-color: darkgreen;
         color: white;
         height: 30px;
     }
 
-    #keyboard{
+    #keyboard {
         background-color: #eee;
         position: fixed;
         width: 100%;
@@ -284,18 +435,18 @@
         transition: bottom 0.3s ease-in-out;
     }
 
-    #keyboard[visible="1"]{
+    #keyboard[visible="1"] {
         bottom: 0;
     }
 
-    #keyboard .row{
+    #keyboard .row {
         margin-top: 12px;
         display: flex;
         gap: 6px;
         justify-content: center;
     }
 
-    #keyboard .row .letter-button{
+    #keyboard .row .letter-button {
         display: block;
         font-size: 15px;
         border-radius: 6px;
@@ -305,16 +456,16 @@
         padding: 9px;
     }
 
-    section#hints{
+    section#hints {
         margin-top: 21px;
     }
 
-    section#hints h2{
+    section#hints h2 {
         text-align: center;
     }
 
     section#hints button,
-    button.give-up{
+    button.give-up {
         margin-top: 15px;
         display: block;
         width: 100%;
@@ -327,36 +478,36 @@
         cursor: pointer;
     }
 
-    section#hints button:hover{
+    section#hints button:hover {
         background-color: #ddd;
     }
-    section#hints button[disabled]{
+    section#hints button[disabled] {
         opacity: 0.5;
     }
 
-    section#description{
+    section#description {
         padding: 30px;
         font-size: 21px;
         text-align: center;
         display: none;
     }
 
-    section#description[show="1"]{
+    section#description[show="1"] {
         display: block;
     }
 
-    section#end-page h2{
+    section#end-page h2 {
         text-align: center;
         padding: 15px;
     }
 
-    section#end-page div.game-title{
+    section#end-page div.game-title {
         text-align: center;
         padding: 15px;
         font-size: 30px;
     }
 
-    section#end-page button.share{
+    section#end-page button.share {
         display: block;
         padding: 15px;
         width: 100%;
@@ -365,5 +516,52 @@
         color: white;
         margin-top: 30px;
         cursor: pointer;
+    }
+
+    div#game-rules-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(9px);
+    }
+
+    div#game-rules-overlay div#game-rules {
+        background-color: white;
+        max-width: 420px;
+        margin: 15px auto;
+        border: 1px solid grey;
+        padding: 30px;
+        height: 85%;
+
+        overflow-y: scroll;
+        position: relative;
+    }
+
+    div#game-rules-overlay div#game-rules .close-button{
+        background-color: red;
+        border: 1px solid red;
+        border-radius: 6px;
+        color: white;
+        position: absolute;
+        top: 21px;
+        right: 21px;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    div#game-rules-overlay div#game-rules .content img{
+        display: block;
+        max-width: 100%;
+        border: 1px solid #eee;
+        border-radius: 15px;
+    }
+
+    div#game-rules-overlay div#game-rules .content p,
+    div#game-rules-overlay div#game-rules .content hr,
+    div#game-rules-overlay div#game-rules .content h2,
+    div#game-rules-overlay div#game-rules .content img{
+        margin-top: 21px;
     }
 </style>
