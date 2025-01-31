@@ -50,6 +50,7 @@
         gameService.moveCursorForward()
 
         if(gameService.isSolved()){            
+            game.hasEnded = true
             fireConfetti()
         }
     }
@@ -70,7 +71,7 @@
     }
 
     const shareGame = function shareGame(){
-        let text = gameService.getGameAsShareableString()
+        let text = gameService.getGameAsShareableString()        
 
         if(navigator.share){            
             navigator.share({
@@ -94,9 +95,9 @@
                 removeLetter()
             }
         })
-
+        
         if (window.matchMedia("(pointer: coarse)").matches){
-            document.querySelector("#keyboard-button").setAttribute("visible", 1)
+            document.querySelector("#keyboard-button").setAttribute("visible", "1")
         }
     })
 
@@ -122,9 +123,13 @@
     <section class="phrase-image">
         <img src={game.image} alt="The phrase" id="phrase-image" />
     </section>
-    {#if gameService.isSolved()}
-    <section id="success">
-        <h2>🎉 Ήβρες τη φράση!</h2>
+    {#if game.hasEnded}
+    <section id="end-page">
+        {#if gameService.isSolved()}
+            <h2>🎉 Ήβρες τη φράση!</h2>
+        {:else}
+            <h2>😢</h2>
+        {/if}
         <div class="game-title">{game.title}</div>
         <button class="share" onclick={shareGame}>Μοιράσου το σκορ σου!</button>
     </section>
@@ -156,16 +161,14 @@
         
     </section>
 
-    <button id="keyboard-button" visible="0" onclick={() => {        
-        showKeyboard = true
-    }}><span>Λύσε το!</span></button>
+    
 
-    <div style={showKeyboard ? "margin-top: 300px" : ""}></div>
+    <div style={showKeyboard && !game.hasEnded ? "margin-top: 300px" : ""}></div>
     {/if}
 </main>
 
 <div id="keyboard" visible={showKeyboard ? "1" : "0"}>
-    <button class="close" onclick={() => showKeyboard = false}>Κλείσιμο</button>
+    <button class="close" onclick={() => showKeyboard = false}>X</button>
     {#each keyboardKeys as keyRow}
         <div class="row">
         {#each keyRow.split(" ") as key}
@@ -262,7 +265,7 @@
         display: none;
     }
 
-    #keyboard-button{
+    #keyboard-button[visible="1"]{
         display: block;
         width: 100%;
         margin-top: 9px;
@@ -310,7 +313,8 @@
         text-align: center;
     }
 
-    section#hints button{
+    section#hints button,
+    button.give-up{
         margin-top: 15px;
         display: block;
         width: 100%;
@@ -341,18 +345,18 @@
         display: block;
     }
 
-    section#success h2{
+    section#end-page h2{
         text-align: center;
         padding: 15px;
     }
 
-    section#success div.game-title{
+    section#end-page div.game-title{
         text-align: center;
         padding: 15px;
         font-size: 30px;
     }
 
-    section#success button.share{
+    section#end-page button.share{
         display: block;
         padding: 15px;
         width: 100%;

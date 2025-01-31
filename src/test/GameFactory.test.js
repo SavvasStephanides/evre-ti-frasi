@@ -46,5 +46,7 @@ describe("GameFactory", () => {
         expect(game.hintsUsed.description).toBe(false)
         expect(game.hintsUsed.revealLargestWord).toBe(false)
         expect(game.hintsUsed.revealFirstLetters).toBe(false)
+
+        expect(game.hasEnded).toBe(false)
     })
 })

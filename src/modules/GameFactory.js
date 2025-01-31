@@ -39,6 +39,8 @@ export default class GameFactory {
             revealFirstLetters: false
         }
 
+        game.hasEnded = false
+
         return game;
     }
 
