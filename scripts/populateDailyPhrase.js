@@ -1,10 +1,9 @@
 import fs from "fs"
 
-let date = new Date()
-let phrases = JSON.parse(fs.readFileSync("../src/lib/phrases.json", "utf-8"))
+let phrases = JSON.parse(fs.readFileSync("./src/lib/phrases.json", "utf-8"))
 
 let dailyPhrases = []
-for(let i = 0 ; i < 600 ; i++){
+for(let i = 0 ; i < 1000 ; i++){
     let phraseDate = new Date()
     phraseDate.setDate(phraseDate.getDate() + i)
     phraseDate = new Date(phraseDate)
@@ -21,8 +20,13 @@ for(let i = 0 ; i < 600 ; i++){
     }
 
     dailyPhrases.push(phrase)
+    console.log(`Added phrase for ${phraseDate}`)
 
 }
 
-fs.writeFileSync("daily-phrase.json", JSON.stringify(dailyPhrases))
+console.log(`${dailyPhrases.length} phrases created. Adding to file...`)
+
+fs.writeFileSync("/evre-ti-frasi/src/lib/daily-phrase.json", JSON.stringify(dailyPhrases))
+
+console.log("Done.")
 

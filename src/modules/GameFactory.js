@@ -39,7 +39,8 @@ export default class GameFactory {
             revealFirstLetters: false
         }
 
-        game.hasEnded = false
+        game.wrongGuesses = 0
+        game.wrongGuessLimit = 10
 
         return game;
     }

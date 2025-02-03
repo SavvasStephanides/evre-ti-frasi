@@ -512,4 +512,31 @@ describe("GameService", () => {
 
         expect(check).toBe(false)
     })
+
+    test("gameHasEnded returns true if puzzle is solved", () => {
+        let game = {"id":3,"title":"Η ΑΘΑΣΙΑ ΤΗΣ ΑΙΣΙΕ ΑΝ ΕΣΙΕΙ ΑΘΑΣΙΑ ΑΣ ΕΣΙΕΙ","image":"/src/lib/phrase-images/3151de9b-6cfd-4df0-a4f6-d1053da3b8d6.jpeg","letterPoints":[{"w":0,"l":0,"solution":"Η","label":"Η"},{"w":1,"l":0,"solution":"Α","label":"Α"},{"w":1,"l":1,"solution":"Θ","label":"Θ"},{"w":1,"l":2,"solution":"Α","label":"Α"},{"w":1,"l":3,"solution":"Σ","label":"Σ"},{"w":1,"l":4,"solution":"Ι","label":"Ι"},{"w":1,"l":5,"solution":"Α","label":"Α"},{"w":2,"l":0,"solution":"Τ","label":"Τ"},{"w":2,"l":1,"solution":"Η","label":"Η"},{"w":2,"l":2,"solution":"Σ","label":"Σ"},{"w":3,"l":0,"solution":"Α","label":"Α"},{"w":3,"l":1,"solution":"Ι","label":"Ι"},{"w":3,"l":2,"solution":"Σ","label":"Σ"},{"w":3,"l":3,"solution":"Ι","label":"Ι"},{"w":3,"l":4,"solution":"Ε","label":"Ε"},{"w":4,"l":0,"solution":"Α","label":"Α"},{"w":4,"l":1,"solution":"Ν","label":"Ν"},{"w":5,"l":0,"solution":"Ε","label":"Ε"},{"w":5,"l":1,"solution":"Σ","label":"Σ"},{"w":5,"l":2,"solution":"Ι","label":"Ι"},{"w":5,"l":3,"solution":"Ε","label":"Ε"},{"w":5,"l":4,"solution":"Ι","label":"Ι"},{"w":6,"l":0,"solution":"Α","label":"Α"},{"w":6,"l":1,"solution":"Θ","label":"Θ"},{"w":6,"l":2,"solution":"Α","label":"Α"},{"w":6,"l":3,"solution":"Σ","label":"Σ"},{"w":6,"l":4,"solution":"Ι","label":"Ι"},{"w":6,"l":5,"solution":"Α","label":"Α"},{"w":7,"l":0,"solution":"Α","label":"Α"},{"w":7,"l":1,"solution":"Σ","label":"Σ"},{"w":8,"l":0,"solution":"Ε","label":"Ε"},{"w":8,"l":1,"solution":"Σ","label":"Σ"},{"w":8,"l":2,"solution":"Ι","label":"Ι"},{"w":8,"l":3,"solution":"Ε","label":"Ε"},{"w":8,"l":4,"solution":"Ι","label":"Ι"}],"cursor":34,"hintsUsed":{"description":false,"revealLargestWord":false,"revealFirstLetters":false}, wrongGuesses: 8, wrongGuessLimit: 10}
+        let gameService = new GameService(game)
+
+        let check = gameService.gameHasEnded()
+
+        expect(check).toBe(true)
+    })
+
+    test("gameHasEnded returns true if wrong guesses reached the limit", () => {
+        let game = {"id":3,"title":"Η ΑΘΑΣΙΑ ΤΗΣ ΑΙΣΙΕ ΑΝ ΕΣΙΕΙ ΑΘΑΣΙΑ ΑΣ ΕΣΙΕΙ","image":"/src/lib/phrase-images/3151de9b-6cfd-4df0-a4f6-d1053da3b8d6.jpeg","letterPoints":[{"w":0,"l":0,"solution":"Η","label":"Η"},{"w":1,"l":0,"solution":"Α","label":"Α"},{"w":1,"l":1,"solution":"Θ","label":"Θ"},{"w":1,"l":2,"solution":"Α","label":"Α"},{"w":1,"l":3,"solution":"Σ","label":"Σ"},{"w":1,"l":4,"solution":"Ι","label":"Ι"},{"w":1,"l":5,"solution":"Α","label":"Α"},{"w":2,"l":0,"solution":"Τ","label":"Τ"},{"w":2,"l":1,"solution":"Η","label":"Η"},{"w":2,"l":2,"solution":"Σ","label":"Σ"},{"w":3,"l":0,"solution":"Α","label":"Α"},{"w":3,"l":1,"solution":"Ι","label":"Ι"},{"w":3,"l":2,"solution":"Σ","label":"Σ"},{"w":3,"l":3,"solution":"Ι","label":"Ι"},{"w":3,"l":4,"solution":"Ε","label":"Ε"},{"w":4,"l":0,"solution":"Α","label":"Α"},{"w":4,"l":1,"solution":"Ν","label":"Ν"},{"w":5,"l":0,"solution":"Ε","label":"Ε"},{"w":5,"l":1,"solution":"Σ","label":"Σ"},{"w":5,"l":2,"solution":"Ι","label":"Ι"},{"w":5,"l":3,"solution":"Ε","label":"Ε"},{"w":5,"l":4,"solution":"Ι","label":"Ι"},{"w":6,"l":0,"solution":"Α","label":"Α"},{"w":6,"l":1,"solution":"Θ","label":"Θ"},{"w":6,"l":2,"solution":"Α","label":"Α"},{"w":6,"l":3,"solution":"Σ","label":"Σ"},{"w":6,"l":4,"solution":"Ι","label":"Ι"},{"w":6,"l":5,"solution":"Α","label":"Α"},{"w":7,"l":0,"solution":"Α","label":"Α"},{"w":7,"l":1,"solution":"Σ","label":"Σ"},{"w":8,"l":0,"solution":"Ε","label":"Ε"},{"w":8,"l":1,"solution":"Σ","label":"Σ"},{"w":8,"l":2,"solution":"Ι","label":"Ι"},{"w":8,"l":3,"solution":"Ε","label":"Ε"},{"w":8,"l":4,"solution":"Ι","label":"Ο"}],"cursor":34,"hintsUsed":{"description":false,"revealLargestWord":false,"revealFirstLetters":false}, wrongGuesses: 10, wrongGuessLimit: 10}
+        let gameService = new GameService(game)
+
+        let check = gameService.gameHasEnded()
+
+        expect(check).toBe(true)
+    })
+
+    test("gameHasEnded returns false if wrong guesses not reached the limit and puzzle is not solved", () => {
+        let game = {"id":3,"title":"Η ΑΘΑΣΙΑ ΤΗΣ ΑΙΣΙΕ ΑΝ ΕΣΙΕΙ ΑΘΑΣΙΑ ΑΣ ΕΣΙΕΙ","image":"/src/lib/phrase-images/3151de9b-6cfd-4df0-a4f6-d1053da3b8d6.jpeg","letterPoints":[{"w":0,"l":0,"solution":"Η","label":""},{"w":1,"l":0,"solution":"Α","label":""},{"w":1,"l":1,"solution":"Θ","label":""},{"w":1,"l":2,"solution":"Α","label":""},{"w":1,"l":3,"solution":"Σ","label":""},{"w":1,"l":4,"solution":"Ι","label":""},{"w":1,"l":5,"solution":"Α","label":""},{"w":2,"l":0,"solution":"Τ","label":""},{"w":2,"l":1,"solution":"Η","label":""},{"w":2,"l":2,"solution":"Σ","label":""},{"w":3,"l":0,"solution":"Α","label":"Ε"},{"w":3,"l":1,"solution":"Ι","label":"Ι"},{"w":3,"l":2,"solution":"Σ","label":"Σ"},{"w":3,"l":3,"solution":"Ι","label":"Ι"},{"w":3,"l":4,"solution":"Ε","label":"Ε"},{"w":4,"l":0,"solution":"Α","label":""},{"w":4,"l":1,"solution":"Ν","label":""},{"w":5,"l":0,"solution":"Ε","label":""},{"w":5,"l":1,"solution":"Σ","label":""},{"w":5,"l":2,"solution":"Ι","label":""},{"w":5,"l":3,"solution":"Ε","label":""},{"w":5,"l":4,"solution":"Ι","label":""},{"w":6,"l":0,"solution":"Α","label":""},{"w":6,"l":1,"solution":"Θ","label":""},{"w":6,"l":2,"solution":"Α","label":""},{"w":6,"l":3,"solution":"Σ","label":""},{"w":6,"l":4,"solution":"Ι","label":""},{"w":6,"l":5,"solution":"Α","label":""},{"w":7,"l":0,"solution":"Α","label":""},{"w":7,"l":1,"solution":"Σ","label":""},{"w":8,"l":0,"solution":"Ε","label":""},{"w":8,"l":1,"solution":"Σ","label":""},{"w":8,"l":2,"solution":"Ι","label":""},{"w":8,"l":3,"solution":"Ε","label":""},{"w":8,"l":4,"solution":"Ι","label":""}],"cursor":15,"hintsUsed":{"description":false,"revealLargestWord":false,"revealFirstLetters":false}, wrongGuesses: 8, wrongGuessLimit: 10}
+        let gameService = new GameService(game)
+
+        let check = gameService.gameHasEnded()
+
+        expect(check).toBe(false)
+    })
 })

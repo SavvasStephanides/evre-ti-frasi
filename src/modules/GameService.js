@@ -72,6 +72,17 @@ export default class GameService {
         return correctLetters.length === wordLetters.length
     }
 
+    incrementWrongGuesses() {
+        this.game.wrongGuesses++
+    }
+
+    gameHasEnded(){
+        let gameIsSolved = this.isSolved()
+        let reachedWrongGuessLimit = this.game.wrongGuesses === this.game.wrongGuessLimit        
+
+        return gameIsSolved ||  reachedWrongGuessLimit
+    }
+
     isSolved(){                   
         return this.game.letterPoints.every((point) => point.label === point.solution)
     }

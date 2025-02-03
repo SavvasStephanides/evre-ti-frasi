@@ -7,9 +7,9 @@
     import confetti from "canvas-confetti";
     import PhraseService from "../modules/PhraseService";
 
-    import loadingGif from "$lib/loading.gif"
+    import loadingGif from "$lib/loading.gif";
 
-    let showGameRules = $state(true)
+    let showGameRules = $state(true);
     import gameRulesImage from "$lib/phrase-images/cea69d11-6c76-4a2e-94a9-dc10f9214830.png";
     import gameRulesGreenSquare from "$lib/rules-assets/green-square.png";
     import gameRulesRedSquare from "$lib/rules-assets/red-square.png";
@@ -20,7 +20,7 @@
     let gameFactory = new GameFactory();
     let currentPhrase = phraseService.getDailyPhrase();
 
-    let showGameRulesPopup
+    let showGameRulesPopup;
 
     let game = $state(null);
     let gameService = $state(null);
@@ -46,34 +46,37 @@
 
         gameService = new GameService(game)
 
-        let showRulesFlagFromLocalStorage = localStorage.getItem("evretifrasi-showRules")
+        let showRulesFlagFromLocalStorage = localStorage.getItem(
+            "evretifrasi-showRules",
+        );
 
-        if(showRulesFlagFromLocalStorage ){
+        if (showRulesFlagFromLocalStorage) {
             showGameRules = showRulesFlagFromLocalStorage === "true"
-        }
-        else{
+        } else {
             showGameRules = true
         }
-        
-    })
+    });
 
     $effect(() => {
         let gameStringified = JSON.stringify(game)
         localStorage.setItem("evretifrasi-game", gameStringified)
 
         localStorage.setItem("evretifrasi-showRules", showGameRules)
-        console.log(localStorage.getItem("evretifrasi-showRules"))
-        
-        
-    });
+    })
 
-    const addLetter = function (letter) {
-        game.letterPoints[game.cursor].label = letter;
-        gameService.moveCursorForward();
+    const addLetter = function (letter) {        
+        if (!gameService.gameHasEnded()) {
+            game.letterPoints[game.cursor].label = letter
 
-        if (gameService.isSolved()) {
-            game.hasEnded = true;
-            fireConfetti();
+            if(game.letterPoints[game.cursor].solution !== letter){
+                gameService.incrementWrongGuesses()
+            }
+
+            gameService.moveCursorForward()
+
+            if (gameService.isSolved()) {
+                fireConfetti()
+            }
         }
     };
 
@@ -151,7 +154,8 @@
         "Ε Ρ Τ Υ Θ Ι Ο Π",
         "Α Σ Δ Φ Γ Η Ξ Κ Λ",
         "Ζ Χ Ψ Ω Β Ν Μ",
-    ];
+    ]
+    
 </script>
 
 <svelte:head>
@@ -163,16 +167,17 @@
         <img src={loadingGif} alt="loading" style=" width: 60px" />
     </div>
 {:else}
+    
     <main>
         <section class="phrase-image">
             <img src={game.image} alt="The phrase" id="phrase-image" />
         </section>
-        {#if game.hasEnded}
+        {#if gameService.gameHasEnded()}
             <section id="end-page">
                 {#if gameService.isSolved()}
                     <h2>🎉 Ήβρες τη φράση!</h2>
                 {:else}
-                    <h2>😢</h2>
+                    <h2>😢 Έν ήβρες τη φράση</h2>
                 {/if}
                 <div class="game-title">{game.title}</div>
                 <button class="share" onclick={shareGame}
@@ -180,6 +185,11 @@
                 >
             </section>
         {:else}
+            <section>
+                <div style="text-align: center; margin-top: 15px; font-size: 15px">
+                    {Array(game.wrongGuesses).fill("🟥").join(" ")} {Array(game.wrongGuessLimit - game.wrongGuesses).fill("⬜️").join(" ")}
+                </div>
+            </section>
             <section
                 id="description"
                 show={game.hintsUsed.description ? "1" : "0"}
@@ -255,20 +265,27 @@
             </section>
 
             <div
-                style={showKeyboard && !game.hasEnded
+                style={showKeyboard && !gameService.gameHasEnded()
                     ? "margin-top: 300px"
                     : ""}
             ></div>
         {/if}
     </main>
 
-    <div id="game-rules-overlay" style={showGameRules ? "display: block" : "display: none"}>
+    <div
+        id="game-rules-overlay"
+        style={showGameRules ? "display: block" : "display: none"}
+    >
         <div id="game-rules">
-            <button onclick={() => showGameRules = false} class="close-button">X</button>
+            <button onclick={() => (showGameRules = false)} class="close-button"
+                >X</button
+            >
             <div class="content">
                 <h1>Πώς παίζεται το παιχνίδι:</h1>
 
-                <p>Μάντεψε την Κυπριακή φράση της ημέρας θωρώντας την εικόνα.</p>
+                <p>
+                    Μάντεψε την Κυπριακή φράση της ημέρας θωρώντας την εικόνα.
+                </p>
 
                 <p>
                     Η φράση μπορεί να εν κάτι που λαλούν οι Κυπραίοι, κάποιο
@@ -292,11 +309,11 @@
                     λέξη εν σωστή
                 </p>
                 <img src={gameRulesGreenWord} alt="" />
-                
+
                 <p>Μόλις έβρεις ολόκληρη την φράση, δείχνει σου το τούτο:</p>
                 <img src={gameRulesSolved} alt="" />
 
-                <hr/>
+                <hr />
 
                 <p style="font-weight: bold">Τζαινούρκα φράση κάθε μέρα!</p>
             </div>
@@ -353,6 +370,7 @@
         gap: 3px;
         margin-top: 21px;
         margin-right: 12px;
+        background-color: white;
     }
 
     .phrase-blank-squares .phrase-word[all-correct="yes"] {
@@ -370,6 +388,9 @@
         margin-right: 3px;
         display: inline-block;
         position: relative;
+
+        transition: background-color 0.3s;
+        transition: border 0.6s;
     }
 
     .phrase-blank-squares .phrase-word .phrase-word-letter .content {
@@ -390,6 +411,7 @@
 
     .phrase-blank-squares .phrase-word .phrase-word-letter[status="CORRECT"] {
         background-color: green;
+        animation: 1s letter-box-scale ease-in-out;
     }
 
     .phrase-blank-squares .phrase-word .phrase-word-letter[status="WRONG"] {
@@ -464,8 +486,7 @@
         text-align: center;
     }
 
-    section#hints button,
-    button.give-up {
+    section#hints button{
         margin-top: 15px;
         display: block;
         width: 100%;
@@ -539,7 +560,7 @@
         position: relative;
     }
 
-    div#game-rules-overlay div#game-rules .close-button{
+    div#game-rules-overlay div#game-rules .close-button {
         background-color: red;
         border: 1px solid red;
         border-radius: 6px;
@@ -551,7 +572,7 @@
         cursor: pointer;
     }
 
-    div#game-rules-overlay div#game-rules .content img{
+    div#game-rules-overlay div#game-rules .content img {
         display: block;
         max-width: 100%;
         border: 1px solid #eee;
@@ -561,7 +582,16 @@
     div#game-rules-overlay div#game-rules .content p,
     div#game-rules-overlay div#game-rules .content hr,
     div#game-rules-overlay div#game-rules .content h2,
-    div#game-rules-overlay div#game-rules .content img{
+    div#game-rules-overlay div#game-rules .content img {
         margin-top: 21px;
+    }
+
+    @keyframes letter-box-scale {
+        33% {
+            transform: scale(1.3);
+        }
+        66% {
+            transform: scale(1);
+        }
     }
 </style>
