@@ -95,8 +95,9 @@ export default class GameService {
         
         let title = `💬 Έβρε τη φράση #${this.game.id}`
         let secondLine = `${this.isSolved() ? "🎉" : "😢"} ${this.game.title.split(" ").map((word, index) => index).map((wordIndex) => this.allLettersInWordAreCorrect(wordIndex) ? "✅" : "❌").join("")}`
-        let thirdLine = Object.keys(this.game.hintsUsed).map(key => this.game.hintsUsed[key] ? "💡" : "").join("")
+        let thirdLine = Array(this.game.wrongGuesses).fill("🟥").join(" ") + Array(this.game.wrongGuessLimit - this.game.wrongGuesses).fill("⬜️").join(" ")
+        let fourthLine = Object.keys(this.game.hintsUsed).map(key => this.game.hintsUsed[key] ? "💡" : "").join("")
 
-        return title + "\n\n" + secondLine + "\n" + thirdLine
+        return title + "\n\n" + secondLine + "\n" + thirdLine + "\n" + fourthLine
     }
 }

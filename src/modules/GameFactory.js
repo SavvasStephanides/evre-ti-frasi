@@ -7,13 +7,10 @@ export default class GameFactory {
 
         const images = import.meta.glob("$lib/phrase-images/*.*", {
             eager: true,
-        });
-        let imagePaths = [];
-        for (let imagePath in images) {
-            imagePaths.push(images[imagePath].default);
-        }
-        let img = imagePaths.find((p) => p.endsWith(phrase.file));
-        game.image = img;
+        })
+
+        let imageUrl = images[Object.keys(images).find(key => key.endsWith(phrase.file))].default    
+        game.image = imageUrl
 
         game.letterPoints = []
 
@@ -42,7 +39,7 @@ export default class GameFactory {
         game.wrongGuesses = 0
         game.wrongGuessLimit = 10
 
-        return game;
+        return game
     }
 
     getGameFromLocalStorage(){

@@ -96,7 +96,7 @@
     };
 
     const shareGame = function shareGame() {
-        let text = gameService.getGameAsShareableString();
+        let text = gameService.getGameAsShareableString()
 
         if (navigator.share) {
             navigator.share({
@@ -156,6 +156,8 @@
         "Ζ Χ Ψ Ω Β Ν Μ",
     ]
     
+    
+    
 </script>
 
 <svelte:head>
@@ -164,7 +166,7 @@
 
 {#if game === null}
     <div style="text-align: center;">
-        <img src={loadingGif} alt="loading" style=" width: 60px" />
+        <img src={loadingGif} alt="loading" style="width: 60px" />
     </div>
 {:else}
     
