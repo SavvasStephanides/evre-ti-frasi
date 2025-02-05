@@ -322,7 +322,7 @@
         </div>
     </div>
 
-    <div id="keyboard" visible={showKeyboard ? "1" : "0"}>
+    <div id="keyboard" visible={showKeyboard && !gameService.gameHasEnded() ? "1" : "0"}>
         <button class="close" onclick={() => (showKeyboard = false)}>X</button>
         {#each keyboardKeys as keyRow}
             <div class="row">
