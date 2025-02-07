@@ -23,8 +23,9 @@
     let showGameRulesPopup;
 
     let game = $state(null);
-    let gameService = $state(null);
-    let showKeyboard = $state(false);
+    let gameService = $state(null)
+    let showKeyboard = $state(false)
+    let midnightTimer = $state("")
 
     onMount(() => {
         const savedGame = gameFactory.getGameFromLocalStorage();
@@ -55,6 +56,20 @@
         } else {
             showGameRules = true
         }
+
+        setInterval(() => {
+            let now = new Date()
+
+        let timerHours = 23 - now.getHours()
+        timerHours = timerHours >= 10 ? timerHours : `0${timerHours}`
+        let timerMinutes = 59 - now.getMinutes()
+        timerMinutes = timerMinutes >= 10 ? timerMinutes : `0${timerMinutes}`
+        let timerSeconds = 59 - now.getSeconds()
+        timerSeconds = timerSeconds >= 10 ? timerSeconds : `0${timerSeconds}`
+
+        midnightTimer = `${timerHours}:${timerMinutes}:${timerSeconds}`
+            
+        },1000)
     });
 
     $effect(() => {
@@ -145,8 +160,7 @@
 
         if (window.matchMedia("(pointer: coarse)").matches) {
             document
-                .querySelector("#keyboard-button")
-                .setAttribute("visible", "1");
+                .querySelector("#keyboard-button").setAttribute("visible", "1")
         }
     });
 
@@ -155,14 +169,7 @@
         "Α Σ Δ Φ Γ Η Ξ Κ Λ",
         "Ζ Χ Ψ Ω Β Ν Μ",
     ]
-    
-    
-    
 </script>
-
-<svelte:head>
-    <title>Έβρε τη Φράση - Unpezable Games</title>
-</svelte:head>
 
 {#if game === null}
     <div style="text-align: center;">
@@ -182,6 +189,12 @@
                     <h2>😢 Έν ήβρες τη φράση</h2>
                 {/if}
                 <div class="game-title">{game.title}</div>
+
+                <div class="timer" style="text-align: center; margin-top: 30px;">
+                    <div>Επόμενη φράση σε</div>
+                    <div style="font-size: 30px; font-weight: bold; margin-top: 9px;">{midnightTimer}</div>
+                </div>
+
                 <button class="share" onclick={shareGame}
                     >Μοιράσου το σκορ σου!</button
                 >
@@ -327,20 +340,18 @@
         {#each keyboardKeys as keyRow}
             <div class="row">
                 {#each keyRow.split(" ") as key}
-                    <div
+                    <button
                         class="letter-button"
-                        onclick={() => addLetter(key)}
-                        role="button"
-                    >
+                        onclick={() => addLetter(key)}>
                         {key}
-                    </div>
+                </button>
                 {/each}
             </div>
         {/each}
         <div class="row">
-            <div class="letter-button" onclick={removeLetter} role="button">
+            <button class="letter-button erase-button" onclick={removeLetter}>
                 ← Σβήσιμο
-            </div>
+            </button>
         </div>
     </div>
 {/if}
@@ -454,6 +465,7 @@
         background-color: #eee;
         position: fixed;
         width: 100%;
+        padding-bottom: 15px;
 
         bottom: -100%;
         transition: bottom 0.3s ease-in-out;
@@ -478,6 +490,13 @@
         border: 1px solid #999;
         background-color: #eee;
         padding: 9px;
+        background-color: white;
+        color: black;
+        width: 36px;
+    }
+
+    #keyboard .row .erase-button{
+        width: 150px;
     }
 
     section#hints {
