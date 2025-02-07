@@ -1,4 +1,6 @@
 <script>
+    import { base } from '$app/paths'
+
     import GameService from "../modules/GameService";
 
     import phrases from "$lib/phrases.json";
@@ -173,7 +175,7 @@
 
 {#if game === null}
     <div style="text-align: center;">
-        <img src={loadingGif} alt="loading" style="width: 60px" />
+        <img src={base + loadingGif} alt="loading" style="width: 60px" />
     </div>
 {:else}
     

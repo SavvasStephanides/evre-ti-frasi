@@ -1,9 +1,10 @@
 <script>
     import appLogo from '$lib/app-logo.png';
+    import { base } from '$app/paths'
 </script>
 <header>
     <h1>
-        <img src={appLogo} alt="" id="app-logo">
+        <img src={base + appLogo} alt="" id="app-logo">
     </h1>
 </header>
 <style>

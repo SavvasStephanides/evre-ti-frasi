@@ -8,6 +8,7 @@ export default class GameFactory {
         const images = import.meta.glob("$lib/phrase-images/*.*", {
             eager: true,
         })
+        
 
         let imageUrl = images[Object.keys(images).find(key => key.endsWith(phrase.file))].default    
         game.image = imageUrl
