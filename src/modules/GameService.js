@@ -53,6 +53,8 @@ export default class GameService {
         })
 
         this.game.hintsUsed.revealLargestWord = true
+        this.moveCursorToFirstUnsolvedLetter()
+        
     }
 
     showDescription(){
@@ -62,6 +64,7 @@ export default class GameService {
     revealFirstLetters(){        
         this.game.letterPoints.filter((point) => point.l === 0).forEach((point) => point.label = point.solution)
         this.game.hintsUsed.revealFirstLetters = true
+        this.moveCursorToFirstUnsolvedLetter()
     }
 
     allLettersInWordAreCorrect(word){
@@ -89,6 +92,11 @@ export default class GameService {
 
     getUnsolvedLetterPoints(){
         return this.game.letterPoints.filter((point) => point.label !== point.solution)
+    }
+
+    moveCursorToFirstUnsolvedLetter(){
+        let firstUnsolvedLetterIndex = this.game.letterPoints.map((letter,index) => ({letter,index})).filter(letter => letter.letter.label === "")[0].index
+        this.game.cursor = firstUnsolvedLetterIndex
     }
 
     getGameAsShareableString(){
