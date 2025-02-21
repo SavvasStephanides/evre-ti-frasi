@@ -11,7 +11,6 @@ export default class PhraseService {
 
         let dailyPhrase = dailyPhrases.find(phrase => phrase.date === formattedDate)
         
-        let phrase = phrases[dailyPhrase.phraseId]
-        return {gameId: dailyPhrase.id, phrase}
+        return dailyPhrase
     }
 }

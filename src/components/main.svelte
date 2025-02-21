@@ -20,7 +20,7 @@
 
     let phraseService = new PhraseService();
     let gameFactory = new GameFactory();
-    let currentPhrase = phraseService.getDailyPhrase();
+    let currentPhrase = phraseService.getDailyPhrase()    
 
     let showGameRulesPopup;
 
@@ -30,12 +30,12 @@
     let midnightTimer = $state("")
 
     onMount(() => {
-        const savedGame = gameFactory.getGameFromLocalStorage();
+        const savedGame = gameFactory.getGameFromLocalStorage()
 
         const dailyGame = gameFactory.getNewGameFromPhrase(
-            currentPhrase.gameId,
+            currentPhrase.id,
             currentPhrase.phrase,
-        );
+        )        
 
         if (savedGame === null) {
             game = dailyGame;
