@@ -203,7 +203,7 @@
             </section>
         {:else}
             <section>
-                <div style="text-align: center; margin-top: 15px; font-size: 15px">
+                <div style={`text-align: center; margin-top: 15px; font-size: 15px; ${game.wrongGuesses === 0 ? "display:none" : ""}`}>
                     {Array(game.wrongGuesses).fill("🟥").join(" ")} {Array(game.wrongGuessLimit - game.wrongGuesses).fill("⬜️").join(" ")}
                 </div>
             </section>

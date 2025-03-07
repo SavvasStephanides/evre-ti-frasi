@@ -36,8 +36,12 @@ export default class GameService {
             this.game.cursor--
         }
 
-        if(this.game.cursor < 0){
-            this.game.cursor = 0
+        let firstUnsolvedLetterIndex = this.game.letterPoints
+            .map((point, index) => ({point, index}))
+            .filter((point) => point.point.label !== point.point.solution)[0].index        
+
+        if(this.game.cursor < firstUnsolvedLetterIndex){
+            this.game.cursor = firstUnsolvedLetterIndex
         }
     }
 
