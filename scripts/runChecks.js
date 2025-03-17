@@ -3,12 +3,8 @@ import fs from "fs"
 let phrases = JSON.parse(fs.readFileSync("./src/lib/phrases.json", "utf-8"))
 let phraseImageFiles = fs.readdirSync("./src/lib/phrase-images")
 
+// Test: Invalid file names:
 let invalidFileNames = phrases.filter((phrase) => !phraseImageFiles.includes(phrase.file))
-let phrasesWithoutHints = phrases.filter((phrase) => phrase.hint === undefined)
-
-console.log(invalidFileNames.length === 0 ? "✅ No invalid file names" : `❌ ${invalidFileNames.length} invalid file names`)
-console.log(phrasesWithoutHints.length === 0 ? "✅ No phrases without hints" : `❌ ${phrasesWithoutHints.length} phrases without hints`)
-
 if(invalidFileNames.length > 0){
     console.log()
     console.log("Phrases with invalid files:")
@@ -17,14 +13,25 @@ if(invalidFileNames.length > 0){
         console.log(`- ${phrase.title}`)
         console.log(`  Filename: ${phrase.file}`)
     })
+
+    throw `❌ ${invalidFileNames.length} invalid file names`
+}
+else{
+    console.log("👍 No invalid file names")
 }
 
+// Test:Phrases without hints
+let phrasesWithoutHints = phrases.filter((phrase) => phrase.hint === undefined)
 if(phrasesWithoutHints.length > 0){
     console.log()
     console.log("Phrases without hints:")
     
     phrasesWithoutHints.forEach((phrase) => {
         console.log(`- ${phrase.title}`)
-        
     })
+
+    throw `❌ ${phrasesWithoutHints.length} phrases without hints`
+}
+else{
+    console.log("👍 No phrases without hints")
 }
