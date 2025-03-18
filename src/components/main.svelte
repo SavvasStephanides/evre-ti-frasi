@@ -230,7 +230,7 @@
                     <div class="timer" style="text-align: center; margin-top: 30px;">
                         <div style="font-weight: bold; font-size: 21px">Σερί νικών:</div>
                         <div style="font-size: 30px; font-weight: bold; margin-top: 9px;">{gameStreak.streak}</div>
-                        <div>{gameStreak.streak === 1 ? "συνεχώμενη νίκη" : "συνεχόμενες νίκες"}</div>
+                        <div>{gameStreak.streak === 1 ? "συνεχόμενη νίκη" : "συνεχόμενες νίκες"}</div>
                     </div>
                 {/if}
 
