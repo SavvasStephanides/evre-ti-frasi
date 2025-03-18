@@ -28,6 +28,7 @@
     let gameService = $state(null)
     let showKeyboard = $state(false)
     let midnightTimer = $state("")
+    let gameStreak = $state({})
 
     onMount(() => {
         const savedGame = gameFactory.getGameFromLocalStorage()
@@ -72,7 +73,9 @@
         midnightTimer = `${timerHours}:${timerMinutes}:${timerSeconds}`
             
         },1000)
-    });
+
+        gameStreak = JSON.parse(localStorage.getItem("evretifrasi-streak"))        
+    })
 
     $effect(() => {
         let gameStringified = JSON.stringify(game)
@@ -93,6 +96,33 @@
 
             if (gameService.isSolved()) {
                 fireConfetti()
+                
+                let updatedStreak
+                if(gameStreak === null){
+                    let d = new Date()
+                    updatedStreak = {
+                        streak: 1, 
+                        date: `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`
+                    }
+                }
+                else{
+                    let d = new Date()
+                    let today = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`
+                    if(new Date(today) - new Date(gameStreak.date) === 86400000){
+                        updatedStreak = {
+                            streak: gameStreak.streak + 1, 
+                            date: today
+                        }
+                    }
+                    else{
+                        updatedStreak = {
+                            streak: 1, 
+                            date: today
+                        }
+                    }
+                }
+                localStorage.setItem("evretifrasi-streak", JSON.stringify(updatedStreak))
+                gameStreak = updatedStreak
             }
         }
     };
@@ -186,20 +216,30 @@
         {#if gameService.gameHasEnded()}
             <section id="end-page">
                 {#if gameService.isSolved()}
-                    <h2>🎉 Ήβρες τη φράση!</h2>
+                    <h2>🎉 Ήβρες τη φράση! 🎉</h2>
                 {:else}
-                    <h2>😢 Έν ήβρες τη φράση</h2>
+                    <h2>😢 Έν ήβρες τη φράση 😢</h2>
                 {/if}
                 <div class="game-title">{game.title}</div>
-
-                <div class="timer" style="text-align: center; margin-top: 30px;">
-                    <div>Επόμενη φράση σε</div>
-                    <div style="font-size: 30px; font-weight: bold; margin-top: 9px;">{midnightTimer}</div>
-                </div>
 
                 <button class="share" onclick={shareGame}
                     >Μοιράσου το σκορ σου!</button
                 >
+
+                {#if gameService.isSolved()}
+                    <div class="timer" style="text-align: center; margin-top: 30px;">
+                        <div style="font-weight: bold; font-size: 21px">Σερί νικών:</div>
+                        <div style="font-size: 30px; font-weight: bold; margin-top: 9px;">{gameStreak.streak}</div>
+                        <div>{gameStreak.streak === 1 ? "συνεχώμενη νίκη" : "συνεχόμενες νίκες"}</div>
+                    </div>
+                {/if}
+
+                <div class="timer" style="text-align: center; margin-top: 30px;">
+                    <div style="font-weight: bold; font-size: 21px">Επόμενη φράση σε</div>
+                    <div style="font-size: 30px; font-weight: bold; margin-top: 9px;">{midnightTimer}</div>
+                </div>
+
+                
             </section>
         {:else}
             <section>
@@ -557,8 +597,10 @@
         width: 100%;
         font-size: 21px;
         background-color: green;
+        border: 0;
+        border-radius: 15px;
         color: white;
-        margin-top: 30px;
+        margin-top: 15px;
         cursor: pointer;
     }
 

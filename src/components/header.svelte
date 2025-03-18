@@ -4,7 +4,7 @@
 </script>
 <header>
     <h1>
-        <img src={base + appLogo} alt="" id="app-logo">
+        <img src={base + appLogo} alt="Έβρε τη φράση" id="app-logo">
     </h1>
 </header>
 <style>
