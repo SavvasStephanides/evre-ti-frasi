@@ -6,10 +6,10 @@ let phrases = JSON.parse(fs.readFileSync("./src/lib/phrases.json", "utf-8"))
 let phraseDate = new Date()
 let id = 0
 
-for(let i = 0 ; i < 1 ; i++){
+for(let i = 0 ; i < 5 ; i++){
     phrases.sort(() => Math.random() - 0.5)
     
-    phrases.forEach((phrase, phraseIndex) => {
+    phrases.forEach((phrase) => {
         const year = phraseDate.getFullYear()
         const month = String(phraseDate.getMonth() + 1).padStart(2, '0')
         const day = String(phraseDate.getDate()).padStart(2, '0')
@@ -22,6 +22,8 @@ for(let i = 0 ; i < 1 ; i++){
         }
 
         dailyPhrases.push(dailyPhrase)
+        console.log(`Added phrase for ${formattedDate}.`);
+        
 
         phraseDate.setDate(phraseDate.getDate() + 1)
         phraseDate = new Date(phraseDate)

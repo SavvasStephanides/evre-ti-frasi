@@ -142,7 +142,7 @@
         });
     };
 
-    const shareGame = function shareGame() {
+    const shareGame = function () {
         let text = gameService.getGameAsShareableString()
 
         if (navigator.share) {
@@ -152,7 +152,18 @@
         } else {
             navigator.clipboard.writeText(text);
         }
-    };
+    }
+
+    const setPhraseImageSize = function () {
+        let image = document.querySelector(".phrase-image img")
+        let currentSize = image.getAttribute("size")
+        if(currentSize === "small"){
+            image.setAttribute("size", "full")
+        }
+        else{
+            image.setAttribute("size", "small")
+        }
+    }
 
     onMount(() => {
         document.addEventListener("keyup", (e) => {
@@ -211,7 +222,7 @@
     
     <main>
         <section class="phrase-image">
-            <img src={game.image} alt="The phrase" size={gameService.isSolved() ? "small" : "full"}/>
+            <img src={game.image} alt="The phrase" size={gameService.isSolved() ? "small" : "full"} onclick={setPhraseImageSize}/>
         </section>
         {#if gameService.gameHasEnded()}
             <section id="end-page">
