@@ -211,7 +211,7 @@
     
     <main>
         <section class="phrase-image">
-            <img src={game.image} alt="The phrase" id="phrase-image" />
+            <img src={game.image} alt="The phrase" size={gameService.isSolved() ? "small" : "full"}/>
         </section>
         {#if gameService.gameHasEnded()}
             <section id="end-page">
@@ -409,10 +409,22 @@
         margin: auto;
     }
 
-    #phrase-image {
+    .phrase-image{
+        display: flex;
+    }
+
+    .phrase-image img{
+        margin: auto;
         display: block;
         width: 100%;
         border-radius: 30px;
+        border: 2px solid white;
+        box-shadow: 0 0 15px white;
+        transition: width 0.6s ease-out;
+    }
+
+    .phrase-image img[size="small"]{
+        width: 25%;
     }
 
     .phrase-blank-squares {
@@ -425,7 +437,7 @@
         gap: 3px;
         margin-top: 21px;
         margin-right: 12px;
-        background-color: white;
+        background-color: transparent;
     }
 
     .phrase-blank-squares .phrase-word[all-correct="yes"] {
@@ -434,8 +446,8 @@
     }
 
     .phrase-blank-squares .phrase-word .phrase-word-letter {
-        border: 3px solid #ddd;
-        box-shadow: 0 0 15px #ddd;
+        border: 3px solid #ccc;
+        box-shadow: 0 0 15px #ccc;
         border-radius: 6px;
         height: 42px;
         width: 30px;
@@ -443,6 +455,7 @@
         margin-right: 3px;
         display: inline-block;
         position: relative;
+        background-color: white;
 
         transition: background-color 0.3s;
         transition: border 0.6s;
@@ -530,7 +543,6 @@
         border-radius: 6px;
         font-size: 21px;
         border: 1px solid #999;
-        background-color: #eee;
         padding: 9px;
         background-color: white;
         color: black;
@@ -554,9 +566,9 @@
         display: block;
         width: 100%;
         font-size: 18px;
-        background-color: #eee;
+        background-color: white;
         border: 1px solid #333;
-        border-radius: 3px;
+        border-radius: 6px;
         padding: 6px;
         color: black;
         cursor: pointer;

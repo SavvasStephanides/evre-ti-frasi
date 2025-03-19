@@ -7,3 +7,9 @@ import Header from "../components/header.svelte"
 <Header />
 <Main />
 <Footer />
+
+<style>
+    :global(body){
+        background-color: #eee;
+    }
+</style>
