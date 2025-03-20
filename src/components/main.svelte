@@ -106,12 +106,16 @@
                     }
                 }
                 else{
-                    let d = new Date()
-                    let today = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`
-                    if(new Date(today) - new Date(gameStreak.date) === 86400000){
+                    let todayDate = new Date()
+                    todayDate.setHours(0,0,0,0)
+
+                    let streakDate = new Date(gameStreak.date)
+                    streakDate.setHours(0,0,0,0)
+                    
+                    if(todayDate - streakDate === 86400000){
                         updatedStreak = {
                             streak: gameStreak.streak + 1, 
-                            date: today
+                            date: `${todayDate.getFullYear()}-${todayDate.getMonth()+1}-${todayDate.getDate()}`
                         }
                     }
                     else{
