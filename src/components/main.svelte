@@ -534,11 +534,14 @@
     #keyboard {
         background-color: #eee;
         position: fixed;
+        left: 0;
         width: 100%;
         padding-bottom: 15px;
+        border-top: 6px solid white;
+        box-shadow: 0 0 15px white;
 
         bottom: -100%;
-        transition: bottom 0.3s ease-in-out;
+        transition: bottom 0.5s ease-in-out;
     }
 
     #keyboard[visible="1"] {
