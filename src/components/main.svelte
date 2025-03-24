@@ -74,7 +74,8 @@
             
         },1000)
 
-        gameStreak = JSON.parse(localStorage.getItem("evretifrasi-streak"))        
+        gameStreak = JSON.parse(localStorage.getItem("evretifrasi-streak"))       
+         
     })
 
     $effect(() => {
@@ -98,33 +99,44 @@
                 fireConfetti()
                 
                 let updatedStreak
+                
                 if(gameStreak === null){
+                    console.log(`gameStreak is null`)
+                    
                     let d = new Date()
+                    d.setHours(0,0,0,0)
                     updatedStreak = {
                         streak: 1, 
-                        date: `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`
+                        date: d
                     }
                 }
-                else{
+                else{                    
                     let todayDate = new Date()
                     todayDate.setHours(0,0,0,0)
+                    let todayDateAsString = `${todayDate.getFullYear()}-${todayDate.getMonth()+1}-${todayDate.getDate()}`
 
                     let streakDate = new Date(gameStreak.date)
-                    streakDate.setHours(0,0,0,0)
+                    streakDate.setHours(0,0,0,0)                    
                     
                     if(todayDate - streakDate === 86400000){
                         updatedStreak = {
                             streak: gameStreak.streak + 1, 
-                            date: `${todayDate.getFullYear()}-${todayDate.getMonth()+1}-${todayDate.getDate()}`
+                            date: todayDate
                         }
                     }
                     else{
                         updatedStreak = {
                             streak: 1, 
-                            date: today
+                            date: todayDateAsString
                         }
                     }
                 }
+
+                console.log(`Saving streak`)
+                console.log(updatedStreak)
+                
+                
+                
                 localStorage.setItem("evretifrasi-streak", JSON.stringify(updatedStreak))
                 gameStreak = updatedStreak
             }
