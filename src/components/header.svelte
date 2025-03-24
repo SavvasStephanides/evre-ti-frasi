@@ -8,7 +8,7 @@
             <img src={base + appLogo} alt="Έβρε τη φράση" id="app-logo">
         </h1>
         <nav>
-            <a href="/unpezable#contact">ΕΠΙΚΟΙΝΩΝΙΑ</a>
+            <a href="https://savvas.me/unpezable#contact">ΕΠΙΚΟΙΝΩΝΙΑ</a>
         </nav>
     </div>
 </header>
