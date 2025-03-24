@@ -10,6 +10,6 @@ import Header from "../components/header.svelte"
 
 <style>
     :global(body){
-        background-color: #eee;
+        background-color: #efefef;
     }
 </style>
