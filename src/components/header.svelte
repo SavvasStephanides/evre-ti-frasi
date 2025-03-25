@@ -1,6 +1,6 @@
 <script>
     import appLogo from '$lib/app-logo.png';
-    import feedbackIcon from '$lib/feedback.svg';
+    import feedbackIcon from '$lib/feedback.png'
     import { base } from '$app/paths'
 </script>
 <header>
