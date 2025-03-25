@@ -24,6 +24,7 @@ build-preview:
 
 build-preview-stop:
 	docker stop evretifrasi-nginx
+	docker rm evretifrasi-nginx
 
 push-changes:
 	docker run -it --rm -v ${PWD}:/evre-ti-frasi -w /evre-ti-frasi -p 5173:5173 node:23-alpine3.19 sh -c "apk add git && git config --global user.email savvascyp@hotmail.com && git add -A && git commit -m '${message}' && git push"

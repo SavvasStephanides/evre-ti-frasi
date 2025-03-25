@@ -1,6 +1,6 @@
 <script>
-    import appLogo from '$lib/app-logo.png';
-    import feedbackIcon from '$lib/feedback.png'
+    import appLogo from '$lib/app-logo.png?url'
+    import feedbackIcon from '$lib/feedback.png?url'
     import { base } from '$app/paths'
 </script>
 <header>
@@ -9,7 +9,9 @@
             <img src={base + appLogo} alt="Έβρε τη φράση" id="app-logo">
         </h1>
         <nav>
-            <a href="https://savvas.me/unpezable#contact" target="_blank" aria-label="Επικοινωνία"><img src={base + feedbackIcon} alt="Επικοινωνία"></a>
+            <a href="https://savvas.me/unpezable#contact" target="_blank" aria-label="Επικοινωνία">
+                <img src={base + feedbackIcon} alt="Επικοινωνία" id="feedback-icon"/>
+            </a>
         </nav>
     </div>
 </header>
