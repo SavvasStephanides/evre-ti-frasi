@@ -1,5 +1,6 @@
 <script>
     import appLogo from '$lib/app-logo.png';
+    import feedbackIcon from '$lib/feedback.svg';
     import { base } from '$app/paths'
 </script>
 <header>
@@ -8,7 +9,7 @@
             <img src={base + appLogo} alt="Έβρε τη φράση" id="app-logo">
         </h1>
         <nav>
-            <a href="https://savvas.me/unpezable#contact" aria-label="Επικοινωνία">✉️</a>
+            <a href="https://savvas.me/unpezable#contact" target="_blank" aria-label="Επικοινωνία"><img src={base + feedbackIcon} alt="Επικοινωνία"></a>
         </nav>
     </div>
 </header>
@@ -55,7 +56,20 @@
         font-family: sans-serif;
         border: 1px solid #eee;
         box-shadow: 0 0 15px #eee;
+        border: 2px solid #333;
         border-radius: 6px;
     }
+
+    nav a:hover{
+        box-shadow: 0 0 6px #333;
+    }
+
+    nav a img{
+        height: 30px;
+    }
+
+
+
+
 </style>
 
