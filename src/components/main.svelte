@@ -282,7 +282,7 @@
                         location.href = "#phrase-blank-squares"
                         showKeyboard = true
                         document.querySelector("#solve-cta").setAttribute("visible", "0")
-                    }}>⌨️ Λύσε το!</button>
+                    }}>Λύσε το!</button>
                 </div>
             </section>
             <section
