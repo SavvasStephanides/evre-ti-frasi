@@ -20,7 +20,7 @@ build-preview:
 	rm -rf build
 	docker run -it --rm -v ${PWD}:/evre-ti-frasi -w /evre-ti-frasi -p 5173:5173 node:23-alpine3.19 npm run build
 	docker run --name evretifrasi-nginx -p 80:80 -v ${PWD}/build:/usr/share/nginx/html/evretifrasi:ro -d nginx:1.27.4-alpine
-	echo "Preview ready: http://localhost/evretifrasi"
+	open "http://localhost/evretifrasi"
 
 build-preview-stop:
 	docker stop evretifrasi-nginx

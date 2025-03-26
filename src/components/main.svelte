@@ -219,8 +219,10 @@
 
         if (window.matchMedia("(pointer: coarse)").matches) {
             document
-                .querySelector("#keyboard-button").setAttribute("visible", "1")
+                .querySelector("#keyboard-button").setAttribute("visible", "1")   
         }
+        
+        
     });
 
     let keyboardKeys = [
@@ -273,6 +275,15 @@
                 <div style={`text-align: center; margin-top: 15px; font-size: 15px; ${game.wrongGuesses === 0 ? "display:none" : ""}`}>
                     {Array(game.wrongGuesses).fill("🟥").join(" ")} {Array(game.wrongGuessLimit - game.wrongGuesses).fill("⬜️").join(" ")}
                 </div>
+                <div id="solve-cta" visible={window.matchMedia(
+                    "(pointer: coarse)",
+                ).matches ? 1 : 0}>
+                    <button onclick={() => {
+                        location.href = "#phrase-blank-squares"
+                        showKeyboard = true
+                        document.querySelector("#solve-cta").setAttribute("visible", "0")
+                    }}>⌨️ Λύσε το!</button>
+                </div>
             </section>
             <section
                 id="description"
@@ -281,7 +292,7 @@
                 {game.hint}
             </section>
 
-            <section class="phrase-blank-squares">
+            <section class="phrase-blank-squares" id="phrase-blank-squares">
                 {#each [...new Set(game.letterPoints.map((point) => point.w))] as wordIndex}
                     <div
                         class="phrase-word"
@@ -318,7 +329,7 @@
                                         showKeyboard =
                                             window.matchMedia(
                                                 "(pointer: coarse)",
-                                            ).matches;
+                                            ).matches
                                     }}
                                 >
                                     {wordLetter.label}
@@ -684,6 +695,27 @@
         max-width: 100%;
         border: 1px solid #eee;
         border-radius: 15px;
+    }
+
+    #solve-cta{
+        display: none;
+    }
+
+    #solve-cta[visible="1"]{
+        display: flex;
+        height: 90px;
+    }
+
+    #solve-cta button{
+        display: block;
+        margin: auto;
+        background-color: green;
+        color: white;
+        width: 120px;
+        height: 60px;
+        border-radius: 15px;
+        font-size: 15px;
+        font-weight: bold;
     }
 
     div#game-rules-overlay div#game-rules .content p,
