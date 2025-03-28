@@ -7,6 +7,7 @@
     <div class="content">
         <h1>
             <img src={base + appLogo} alt="Έβρε τη φράση" id="app-logo">
+            <div class="beta">beta</div>
         </h1>
         <nav>
             <a href="https://savvas.me/unpezable#contact" target="_blank" aria-label="Επικοινωνία">
@@ -39,6 +40,12 @@
     h1 #app-logo{
         display: block;
         height: 60px;
+    }
+
+    h1 .beta{
+        font-family: sans-serif;
+        font-size: 15px;
+        text-align: right;
     }
 
     nav{

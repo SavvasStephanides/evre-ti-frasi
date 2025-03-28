@@ -74,8 +74,7 @@
             
         },1000)
 
-        gameStreak = JSON.parse(localStorage.getItem("evretifrasi-streak"))       
-         
+        gameStreak = JSON.parse(localStorage.getItem("evretifrasi-streak"))             
     })
 
     $effect(() => {
