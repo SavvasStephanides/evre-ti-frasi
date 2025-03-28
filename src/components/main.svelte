@@ -95,6 +95,7 @@
             gameService.moveCursorForward()
 
             if (gameService.isSolved()) {
+                location.href="#top"
                 fireConfetti()
                 
                 let updatedStreak
@@ -487,9 +488,9 @@
         box-shadow: 0 0 15px #ccc;
         border-radius: 6px;
         height: 42px;
-        width: 30px;
+        width: 24px;
         font-size: 21px;
-        margin-right: 3px;
+        margin-right: 1px;
         display: inline-block;
         position: relative;
         background-color: white;

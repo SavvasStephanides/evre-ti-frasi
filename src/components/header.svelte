@@ -4,6 +4,7 @@
     import { base } from '$app/paths'
 </script>
 <header>
+    <div id="top"></div>
     <div class="content">
         <h1>
             <img src={base + appLogo} alt="Έβρε τη φράση" id="app-logo">
