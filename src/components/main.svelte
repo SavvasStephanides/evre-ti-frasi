@@ -134,7 +134,7 @@
                         alert("Not one day old")
                         updatedStreak = {
                             streak: 1, 
-                            date: todayDateAsString
+                            date: todayDate
                         }
                     }
                 }
@@ -142,7 +142,7 @@
                 console.log(`Saving streak`)
                 console.log(updatedStreak)
                 alert(`Updated streak: ${JSON.stringify(updatedStreak)}`)
-                
+
                 localStorage.setItem("evretifrasi-streak", JSON.stringify(updatedStreak))
                 gameStreak = updatedStreak
             }
