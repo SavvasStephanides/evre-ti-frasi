@@ -8,7 +8,6 @@
     <div class="content">
         <h1>
             <img src={base + appLogo} alt="Έβρε τη φράση" id="app-logo">
-            <div class="beta">beta</div>
         </h1>
         <nav>
             <a href="https://savvas.me/unpezable#contact" target="_blank" aria-label="Επικοινωνία">

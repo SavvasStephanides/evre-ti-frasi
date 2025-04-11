@@ -102,7 +102,6 @@
                 
                 if(gameStreak === null){
                     console.log(`gameStreak is null`)
-                    alert("gameStreak is null")
                     
                     let d = new Date()
                     d.setHours(0,0,0,0)
@@ -112,10 +111,6 @@
                     }
                 }
                 else{                    
-                    alert(`gameStreak: ${JSON.stringify(gameStreak)}`)
-                    alert(`gameStreak.streak: ${gameStreak.streak}`)
-                    alert(`gameStreak.date: ${gameStreak.date}`)
-
                     let todayDate = new Date()
                     todayDate.setHours(0,0,0,0)
                     let todayDateAsString = `${todayDate.getFullYear()}-${todayDate.getMonth()+1}-${todayDate.getDate()}`
@@ -124,14 +119,12 @@
                     streakDate.setHours(0,0,0,0)                    
                     
                     if(todayDate - streakDate === 86400000){
-                        alert("One day old")
                         updatedStreak = {
                             streak: gameStreak.streak + 1, 
                             date: todayDate
                         }
                     }
                     else{
-                        alert("Not one day old")
                         updatedStreak = {
                             streak: 1, 
                             date: todayDate
@@ -141,7 +134,6 @@
 
                 console.log(`Saving streak`)
                 console.log(updatedStreak)
-                alert(`Updated streak: ${JSON.stringify(updatedStreak)}`)
 
                 localStorage.setItem("evretifrasi-streak", JSON.stringify(updatedStreak))
                 gameStreak = updatedStreak
