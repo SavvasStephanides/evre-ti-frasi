@@ -27,6 +27,7 @@
     let game = $state(null);
     let gameService = $state(null)
     let showKeyboard = $state(false)
+    let showSolvePrompt = $state(true)
     let midnightTimer = $state("")
     let gameStreak = $state({})
 
@@ -281,6 +282,10 @@
                 {game.hint}
             </section>
 
+            <section style={`padding: 15px; ${showSolvePrompt ? "display: block;" : "display: none"}`}>
+                Ξέρεις την Κυπριακή φράση που δείχνει η εικόνα; Πάτα στο πρώτο τετραγωνούι για να γράψεις την απάντηση σου!
+            </section>
+
             <section class="phrase-blank-squares" id="phrase-blank-squares" style="position: relative;">
                
                 {#each [...new Set(game.letterPoints.map((point) => point.w))] as wordIndex}
@@ -320,6 +325,8 @@
                                             window.matchMedia(
                                                 "(pointer: coarse)",
                                             ).matches
+
+                                        showSolvePrompt = false
                                     }}
                                 >
                                     {wordLetter.label}
@@ -328,15 +335,6 @@
                         {/each}
                     </div>
                 {/each}
-                <div id="solve-cta" style="position:absolute; top: 0; left: 0; background-color: #ddd; border-radius: 15px; opacity: 0.9; backdrop-filter: blur(30px); width: 100%; height: 100%;" visible={window.matchMedia(
-                    "(pointer: coarse)",
-                ).matches ? 1 : 0}> 
-                    <button onclick={() => {
-                        location.href = "#phrase-blank-squares"
-                        showKeyboard = true
-                        document.querySelector("#solve-cta").setAttribute("visible", "0")
-                    }}>Λύσε το!</button>
-                </div>
             </section>
 
             <section id="hints">
@@ -465,7 +463,7 @@
     }
 
     .phrase-blank-squares {
-        padding: 21px;
+        padding: 9px;
         text-align: center;
     }
 
@@ -512,6 +510,8 @@
 
     .phrase-blank-squares .phrase-word .phrase-word-letter.cursor {
         border: 3px solid black;
+        box-shadow: 0 0 15px #333;
+        position: relative;
     }
 
     .phrase-blank-squares .phrase-word .phrase-word-letter[status="CORRECT"] {
@@ -539,27 +539,13 @@
         box-shadow: 0 0 0;
     }
 
-    #keyboard-button[visible="0"] {
-        display: none;
-    }
-
-    #keyboard-button[visible="1"] {
-        display: block;
-        width: 100%;
-        margin-top: 9px;
-        font-size: 15px;
-        background-color: darkgreen;
-        color: white;
-        height: 30px;
-    }
-
     #keyboard {
         background-color: #eee;
         position: fixed;
         left: 0;
         width: 100%;
         padding-bottom: 15px;
-        border-top: 6px solid white;
+        border-top: 3px solid #333;
         box-shadow: 0 0 15px white;
 
         bottom: -100%;
@@ -583,7 +569,7 @@
         border-radius: 6px;
         font-size: 21px;
         border: 1px solid #999;
-        padding: 9px;
+        padding: 6px;
         background-color: white;
         color: black;
         width: 36px;
@@ -694,28 +680,6 @@
         max-width: 100%;
         border: 1px solid #eee;
         border-radius: 15px;
-    }
-
-    #solve-cta{
-        display: none;
-    }
-
-    #solve-cta[visible="1"]{
-        display: flex;
-        height: 90px;
-    }
-
-    #solve-cta button{
-        display: block;
-        margin: auto;
-        background-color: green;
-        color: white;
-        width: 180px;
-        height: 60px;
-        border-radius: 15px;
-        font-size: 21px;
-        font-weight: bold;
-        box-shadow: 0 0 15px #333;
     }
 
     div#game-rules-overlay div#game-rules .content p,
