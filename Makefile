@@ -1,27 +1,29 @@
+docker := docker run -it --rm -v ${PWD}:/evre-ti-frasi -w /evre-ti-frasi -p 5173:5173 node:23-alpine3.19
+
 container:
-	docker run -it --rm -v ${PWD}:/evre-ti-frasi -w /evre-ti-frasi -p 5173:5173 node:23-alpine3.19 sh
+	$(docker) sh
 
 install:
-	docker run -it --rm -v ${PWD}:/evre-ti-frasi -w /evre-ti-frasi -p 5173:5173 node:23-alpine3.19 npm i
+	$(docker) npm i
 
 run-dev:
-	docker run -it --rm -v ${PWD}:/evre-ti-frasi -w /evre-ti-frasi -p 5173:5173 node:23-alpine3.19 npm run dev
+	$(docker) npm run dev
 
 populate:
-	docker run -it --rm -v ${PWD}:/evre-ti-frasi -w /evre-ti-frasi -p 5173:5173 node:23-alpine3.19 node scripts/populateDailyPhrase.v2.js
+	$(docker) node scripts/populateDailyPhrase.v2.js
 
 add-phrase:
-	docker run -it --rm -v ${PWD}:/evre-ti-frasi -w /evre-ti-frasi -p 5173:5173 node:23-alpine3.19 node scripts/addPhraseToDatabase.js
+	$(docker) node scripts/addPhraseToDatabase.js
 
 test:
-	docker run -it --rm -v ${PWD}:/evre-ti-frasi -w /evre-ti-frasi -p 5173:5173 node:23-alpine3.19 npm test
+	$(docker) npm test
 
 checks:
-	docker run -it --rm -v ${PWD}:/evre-ti-frasi -w /evre-ti-frasi -p 5173:5173 node:23-alpine3.19 node scripts/runChecks.js
+	$(docker) node scripts/runChecks.js
 
 build-preview:
 	rm -rf build
-	docker run -it --rm -v ${PWD}:/evre-ti-frasi -w /evre-ti-frasi -p 5173:5173 node:23-alpine3.19 npm run build
+	$(docker) npm run build
 	docker run --name evretifrasi-nginx -p 80:80 -v ${PWD}/build:/usr/share/nginx/html/evretifrasi:ro -d nginx:1.27.4-alpine
 	open "http://localhost/evretifrasi"
 
@@ -30,4 +32,4 @@ build-preview-stop:
 	docker rm evretifrasi-nginx
 
 push-changes:
-	docker run -it --rm -v ${PWD}:/evre-ti-frasi -w /evre-ti-frasi -p 5173:5173 node:23-alpine3.19 sh -c "apk add git && git config --global user.email savvascyp@hotmail.com && git add -A && git commit -m '${message}' && git push"
+	$(docker) sh -c "apk add git && git config --global user.email savvascyp@hotmail.com && git add -A && git commit -m '${message}' && git push"

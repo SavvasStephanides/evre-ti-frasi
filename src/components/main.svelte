@@ -282,12 +282,7 @@
                 {game.hint}
             </section>
 
-            <section style={`padding: 15px; ${showSolvePrompt ? "display: block;" : "display: none"}`}>
-                Ξέρεις την Κυπριακή φράση που δείχνει η εικόνα; Πάτα στο πρώτο τετραγωνούι για να γράψεις την απάντηση σου!
-            </section>
-
             <section class="phrase-blank-squares" id="phrase-blank-squares" style="position: relative;">
-               
                 {#each [...new Set(game.letterPoints.map((point) => point.w))] as wordIndex}
                     <div
                         class="phrase-word"
@@ -335,6 +330,10 @@
                         {/each}
                     </div>
                 {/each}
+                <div id="overlay" onclick={(event) => {
+                    showKeyboard = true
+                    event.target.setAttribute("hidden", "1")
+                }}></div>
             </section>
 
             <section id="hints">
@@ -680,6 +679,26 @@
         max-width: 100%;
         border: 1px solid #eee;
         border-radius: 15px;
+    }
+
+    #overlay{
+        background-color: transparent; 
+        position: absolute; 
+        width: 100%; 
+        height: 100%; 
+        top: 0; 
+        left: 0;
+        display: none;
+    }
+
+    @media (pointer: coarse) {
+        #overlay {
+            display: block;
+        }
+    }
+
+    #overlay[hidden="1"] {
+        display: none;
     }
 
     div#game-rules-overlay div#game-rules .content p,
