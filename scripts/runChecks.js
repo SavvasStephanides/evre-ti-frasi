@@ -20,7 +20,7 @@ else{
     console.log("👍 No invalid file names")
 }
 
-// Test:Phrases without hints
+// Test: Phrases without hints
 let phrasesWithoutHints = phrases.filter((phrase) => phrase.hint === undefined)
 if(phrasesWithoutHints.length > 0){
     console.log()
@@ -35,3 +35,16 @@ if(phrasesWithoutHints.length > 0){
 else{
     console.log("👍 No phrases without hints")
 }
+
+//Test: Phrases in all caps
+const phraseTitles = phrases.map((phrase) => phrase.title)
+const phrasesNotInAllCaps = phraseTitles.filter((title) => title !== title.toUpperCase())
+
+if(phrasesNotInAllCaps.length > 0){
+    throw `❌ ${phrasesNotInAllCaps.length} phrases not in all caps`
+}
+else{
+    console.log("👍 All phrases are in all caps")
+}
+
+

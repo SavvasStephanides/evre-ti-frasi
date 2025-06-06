@@ -32,4 +32,4 @@ build-preview-stop:
 	docker rm evretifrasi-nginx
 
 push-changes:
-	$(docker) sh -c "apk add git && git config --global user.email savvascyp@hotmail.com && git add -A && git commit -m '${message}' && git push"
+	$(docker) sh -c "apk add git && git config --global user.email ${email} && git add -A && git commit -m '${message}' && git push"
