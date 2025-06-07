@@ -11,23 +11,15 @@
 
     import loadingGif from "$lib/loading.gif";
 
-    let showGameRules = $state(true);
-    import gameRulesImage from "$lib/phrase-images/cea69d11-6c76-4a2e-94a9-dc10f9214830.png";
-    import gameRulesGreenSquare from "$lib/rules-assets/green-square.png";
-    import gameRulesRedSquare from "$lib/rules-assets/red-square.png";
-    import gameRulesGreenWord from "$lib/rules-assets/green-word.png";
-    import gameRulesSolved from "$lib/rules-assets/solved.png";
+    import GameRulesOverlay from "./gameRulesOverlay.svelte"
 
     let phraseService = new PhraseService();
     let gameFactory = new GameFactory();
     let currentPhrase = phraseService.getDailyPhrase()    
 
-    let showGameRulesPopup;
-
     let game = $state(null);
     let gameService = $state(null)
     let showKeyboard = $state(false)
-    let showSolvePrompt = $state(true)
     let midnightTimer = $state("")
     let gameStreak = $state({})
 
@@ -51,16 +43,6 @@
 
         gameService = new GameService(game)
 
-        let showRulesFlagFromLocalStorage = localStorage.getItem(
-            "evretifrasi-showRules",
-        );
-
-        if (showRulesFlagFromLocalStorage) {
-            showGameRules = showRulesFlagFromLocalStorage === "true"
-        } else {
-            showGameRules = true
-        }
-
         setInterval(() => {
             let now = new Date()
 
@@ -81,8 +63,6 @@
     $effect(() => {
         let gameStringified = JSON.stringify(game)
         localStorage.setItem("evretifrasi-game", gameStringified)
-
-        localStorage.setItem("evretifrasi-showRules", showGameRules)
     })
 
     const addLetter = function (letter) {        
@@ -321,7 +301,6 @@
                                                 "(pointer: coarse)",
                                             ).matches
 
-                                        showSolvePrompt = false
                                     }}
                                 >
                                     {wordLetter.label}
@@ -363,53 +342,7 @@
         {/if}
     </main>
 
-    <div
-        id="game-rules-overlay"
-        style={showGameRules ? "display: block" : "display: none"}
-    >
-        <div id="game-rules">
-            <button onclick={() => (showGameRules = false)} class="close-button"
-                >X</button
-            >
-            <div class="content">
-                <h1>Πώς παίζεται το παιχνίδι:</h1>
-
-                <p>
-                    Μάντεψε την Κυπριακή φράση της ημέρας θωρώντας την εικόνα.
-                </p>
-
-                <p>
-                    Η φράση μπορεί να εν κάτι που λαλούν οι Κυπραίοι, κάποιο
-                    γνωστό τραγούδι, κάποιος γλωσσοδέτης κτλ...
-                </p>
-
-                <hr />
-
-                <h2>Παράδειγματα</h2>
-
-                <img src={gameRulesImage} alt="" style="width: 100%" />
-
-                <p>Πράσινο κουτούι σημαίνει ότι το γράμμα εν σωστό</p>
-                <img src={gameRulesGreenSquare} alt="" />
-
-                <p>Κόκκινο κουτούι σημαίνει ότι το γράμμα εν λάθος</p>
-                <img src={gameRulesRedSquare} alt="" />
-
-                <p>
-                    Πράσινο κουτούι γυρώ που την λέξη σημαίνει ότι ολόκληρη η
-                    λέξη εν σωστή
-                </p>
-                <img src={gameRulesGreenWord} alt="" />
-
-                <p>Μόλις έβρεις ολόκληρη την φράση, δείχνει σου το τούτο:</p>
-                <img src={gameRulesSolved} alt="" />
-
-                <hr />
-
-                <p style="font-weight: bold">Τζαινούρκα φράση κάθε μέρα!</p>
-            </div>
-        </div>
-    </div>
+    <GameRulesOverlay />
 
     <div id="keyboard" visible={showKeyboard && !gameService.gameHasEnded() ? "1" : "0"}>
         <button class="close" onclick={() => (showKeyboard = false)}>X</button>
