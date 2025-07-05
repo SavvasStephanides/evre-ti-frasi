@@ -30,7 +30,7 @@
     >
         <div id="game-rules">
             <button onclick={() => (showGameRules = false)} class="close-button"
-                >X</button
+                >&times;</button
             >
             <div class="content">
                 <h1>Πώς παίζεται το παιχνίδι:</h1>
@@ -92,7 +92,7 @@
         max-width: 420px;
         margin: 15px auto;
         border: 1px solid grey;
-        padding: 30px;
+        padding: 15px;
         height: 85%;
 
         overflow-y: scroll;
@@ -104,11 +104,16 @@
         border: 1px solid red;
         border-radius: 6px;
         color: white;
-        position: absolute;
-        top: 21px;
-        right: 21px;
+        position: sticky;
+        top: 3px;
+        left: 0;
         font-size: 18px;
         cursor: pointer;
+        font-size: 30px;
+    }
+
+    div#game-rules-overlay div#game-rules .content{
+        margin-top: 30px;
     }
 
     div#game-rules-overlay div#game-rules .content img {
