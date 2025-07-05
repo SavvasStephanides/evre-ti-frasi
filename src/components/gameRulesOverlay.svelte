@@ -6,6 +6,9 @@
     import gameRulesGreenWord from "$lib/rules-assets/green-word.png";
     import gameRulesSolved from "$lib/rules-assets/solved.png";
     import { onMount } from "svelte";
+    import EnvironmentVariableConfig from "../modules/Config";
+
+    const environmentVariables = new EnvironmentVariableConfig()
 
     onMount(() => {
         let showRulesFlagFromLocalStorage = localStorage.getItem(
@@ -48,22 +51,22 @@
 
                 <h2>Παράδειγματα</h2>
 
-                <img src={gameRulesImage} alt="" style="width: 100%" />
+                <img src={`${environmentVariables.assetsBaseUrl}/phrase-images/cea69d11-6c76-4a2e-94a9-dc10f9214830.png`} alt="" style="width: 100%" />
 
                 <p>Πράσινο κουτούι σημαίνει ότι το γράμμα εν σωστό</p>
-                <img src={gameRulesGreenSquare} alt="" />
+                <img src={`${environmentVariables.assetsBaseUrl}/rules-assets/green-square.png`} alt="" />
 
                 <p>Κόκκινο κουτούι σημαίνει ότι το γράμμα εν λάθος</p>
-                <img src={gameRulesRedSquare} alt="" />
+                <img src={`${environmentVariables.assetsBaseUrl}/rules-assets/red-square.png`} alt="" />
 
                 <p>
                     Πράσινο κουτούι γυρώ που την λέξη σημαίνει ότι ολόκληρη η
                     λέξη εν σωστή
                 </p>
-                <img src={gameRulesGreenWord} alt="" />
+                <img src={`${environmentVariables.assetsBaseUrl}/rules-assets/green-word.png`} alt="" />
 
                 <p>Μόλις έβρεις ολόκληρη την φράση, δείχνει σου το τούτο:</p>
-                <img src={gameRulesSolved} alt="" />
+                <img src={`${environmentVariables.assetsBaseUrl}/rules-assets/solved.png`} alt="" />
 
                 <hr />
 

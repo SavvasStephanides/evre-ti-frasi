@@ -12,6 +12,7 @@
     import loadingGif from "$lib/loading.gif";
 
     import GameRulesOverlay from "./gameRulesOverlay.svelte"
+    import EnvironmentVariableConfig from '../modules/Config';
 
     let phraseService = new PhraseService();
     let gameFactory = new GameFactory();
@@ -63,6 +64,9 @@
     $effect(() => {
         let gameStringified = JSON.stringify(game)
         localStorage.setItem("evretifrasi-game", gameStringified)
+        
+        console.log(new EnvironmentVariableConfig().assetsBaseUrl)
+        
     })
 
     const addLetter = function (letter) {        
