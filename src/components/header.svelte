@@ -1,17 +1,19 @@
 <script>
-    import appLogo from '$lib/app-logo.png?url'
-    import feedbackIcon from '$lib/feedback.png?url'
     import { base } from '$app/paths'
+    import EnvironmentVariableConfig from '../modules/Config';
+
+    const environmentVariables = new EnvironmentVariableConfig()
+    const assetsBaseUrl = environmentVariables.assetsBaseUrl
 </script>
 <header>
     <div id="top"></div>
     <div class="content">
         <h1>
-            <img src={base + appLogo} alt="Έβρε τη φράση" id="app-logo">
+            <img src={`${assetsBaseUrl}/app-logo.png`} alt="Έβρε τη φράση" id="app-logo">
         </h1>
         <nav>
             <a href="https://savvas.me/unpezable#contact" target="_blank" aria-label="Επικοινωνία">
-                <img src={base + feedbackIcon} alt="Επικοινωνία" id="feedback-icon"/>
+                <img src={`${assetsBaseUrl}/feedback.png`} alt="Επικοινωνία" id="feedback-icon"/>
             </a>
         </nav>
     </div>

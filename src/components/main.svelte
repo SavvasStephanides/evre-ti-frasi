@@ -9,10 +9,11 @@
     import confetti from "canvas-confetti";
     import PhraseService from "../modules/PhraseService";
 
-    import loadingGif from "$lib/loading.gif";
-
     import GameRulesOverlay from "./gameRulesOverlay.svelte"
     import EnvironmentVariableConfig from '../modules/Config';
+
+    const environmentVariables = new EnvironmentVariableConfig()
+    const assetsBaseUrl = environmentVariables.assetsBaseUrl
 
     let phraseService = new PhraseService();
     let gameFactory = new GameFactory();
@@ -63,10 +64,7 @@
 
     $effect(() => {
         let gameStringified = JSON.stringify(game)
-        localStorage.setItem("evretifrasi-game", gameStringified)
-        
-        console.log(new EnvironmentVariableConfig().assetsBaseUrl)
-        
+        localStorage.setItem("evretifrasi-game", gameStringified)        
     })
 
     const addLetter = function (letter) {        
@@ -116,9 +114,6 @@
                         }
                     }
                 }
-
-                console.log(`Saving streak`)
-                console.log(updatedStreak)
 
                 localStorage.setItem("evretifrasi-streak", JSON.stringify(updatedStreak))
                 gameStreak = updatedStreak
@@ -217,13 +212,13 @@
 
 {#if game === null}
     <div style="text-align: center;">
-        <img src={base + loadingGif} alt="loading" style="width: 60px" />
+        <img src={`${assetsBaseUrl}/loading.gif`} alt="loading" style="width: 60px" />
     </div>
 {:else}
     
     <main>
         <section class="phrase-image">
-            <img src={game.image} alt="The phrase" size={gameService.isSolved() ? "small" : "full"} onclick={setPhraseImageSize}/>
+            <img src={`${assetsBaseUrl}/phrase-images/${game.file}`} alt="The phrase" size={gameService.isSolved() ? "small" : "full"} onclick={setPhraseImageSize}/>
         </section>
         {#if gameService.gameHasEnded()}
             <section id="end-page">

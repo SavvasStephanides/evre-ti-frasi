@@ -4,14 +4,7 @@ export default class GameFactory {
         game.id = gameId
         game.title = phrase.title
         game.hint = phrase.hint
-
-        const images = import.meta.glob("$lib/phrase-images/*.*", {
-            eager: true,
-        })
-        
-
-        let imageUrl = images[Object.keys(images).find(key => key.endsWith(phrase.file))].default    
-        game.image = imageUrl
+        game.file = phrase.file
 
         game.letterPoints = []
 

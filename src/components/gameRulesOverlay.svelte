@@ -1,10 +1,5 @@
 <script>
     let showGameRules = $state(true);
-    import gameRulesImage from "$lib/phrase-images/cea69d11-6c76-4a2e-94a9-dc10f9214830.png";
-    import gameRulesGreenSquare from "$lib/rules-assets/green-square.png";
-    import gameRulesRedSquare from "$lib/rules-assets/red-square.png";
-    import gameRulesGreenWord from "$lib/rules-assets/green-word.png";
-    import gameRulesSolved from "$lib/rules-assets/solved.png";
     import { onMount } from "svelte";
     import EnvironmentVariableConfig from "../modules/Config";
 
