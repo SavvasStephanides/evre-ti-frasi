@@ -19,7 +19,7 @@ test:
 	$(docker) npm test
 
 checks:
-	$(docker) node scripts/runChecks.js
+	$(docker) ash -c "apk add git && git clone https://github.com/SavvasStephanides/evre-ti-frasi-assets.git /tmp/assets && node scripts/runChecks.js"
 
 build-preview:
 	rm -rf build

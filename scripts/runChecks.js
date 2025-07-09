@@ -1,7 +1,7 @@
 import fs from "fs"
 
 let phrases = JSON.parse(fs.readFileSync("./src/lib/phrases.json", "utf-8"))
-let phraseImageFiles = fs.readdirSync("./src/lib/phrase-images")
+let phraseImageFiles = fs.readdirSync("/tmp/assets/src/phrase-images")
 
 // Test: Invalid file names:
 let invalidFileNames = phrases.filter((phrase) => !phraseImageFiles.includes(phrase.file))

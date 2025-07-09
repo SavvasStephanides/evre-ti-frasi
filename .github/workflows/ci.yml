@@ -32,6 +32,10 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+    - name: Run file checks
+      run: |
+        git clone https://github.com/SavvasStephanides/evre-ti-frasi-assets.git /tmp/assets
+        node scripts/runChecks.js
     - name: Start deployment
       run: |
         npm i
