@@ -4,9 +4,9 @@ let dailyPhrases = []
 
 let phrases = JSON.parse(fs.readFileSync("./src/lib/phrases.json", "utf-8"))
 let phraseDate = new Date()
-let id = 0
+let id = 73
 
-for(let i = 0 ; i < 5 ; i++){
+for(let i = 0 ; i < 1 ; i++){
     phrases.sort(() => Math.random() - 0.5)
     
     phrases.forEach((phrase) => {
