@@ -250,6 +250,7 @@
             </section>
         {:else}
             <section>
+                <div style={`padding: 9px; font-size: 18px`}>ℹ Ποιά εν η Κυπριακή φράση που δείχνει η εικόνα; Χρησιμοποία το πληκτρολόγιο σου ή πάτα πάνω στα τετράγωνα για να ξεκινήσεις να γράφεις την απάντηση σου! Άμαν δυσκολεύκεσαι, χρησιμοποία τες βοήθειες που κάτω!</div>
                 <div style={`text-align: center; margin-top: 15px; font-size: 15px; ${game.wrongGuesses === 0 ? "display:none" : ""}`}>
                     {Array(game.wrongGuesses).fill("🟥").join(" ")} {Array(game.wrongGuessLimit - game.wrongGuesses).fill("⬜️").join(" ")}
                 </div>
